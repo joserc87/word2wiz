@@ -1,6 +1,7 @@
 #!/usr/bin/python
 
 import sys
+from os.path import basename, splitext
 import word
 from config import Config
 from jinja2 import Environment, FileSystemLoader
@@ -47,7 +48,7 @@ def word2wiz(path):
         ('Marjolein', 'Rijkeboer',   'Adviserend psycholoog'),
         ('Herman',    'Flens',       'Medisch adviseur'),
         ('Job',       'van Huizen',  'Medisch adviseur')]
-    print(main_template.render(doc_name='TODO',
+    print(main_template.render(doc_name=splitext(basename(path))[0],
                                config=config,
                                medewerkers=medewerkers,
                                controls=controls))
