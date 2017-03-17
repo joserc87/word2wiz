@@ -4,6 +4,7 @@ step 'First Algemeen', 'Buitenland':
     required 'Onderwerp:' = '{{ config.defaultonderwerptekst }}' -> $briefonderwerp
     label = 'Ondertekenaar'
     required radio '' = '{{ config.defaultondertekenaar }}' as medewerker:
+        # Registered medewerkers
         {% for name, lastname, function in medewerkers %}
         label = '{{ name }} {{ lastname }} - {{ function }}' as {{ ( name + '_' + lastname )|replace(' ', '_')|lower }}
         {% endfor %}
@@ -16,25 +17,18 @@ step 'First Algemeen', 'Buitenland':
                 'Klachtbehandelaar'
                 'Specialist machtigingen'
 
+    # Set the name and function of the selected medewerker
     {% for name, lastname, function in medewerkers %}
     when medewerker == '{{ ( name + '_' + lastname )|replace(' ', '_')|lower }}':
         $ondertekenaar_naam = '{{ name }} {{ lastname }}'
         $ondertekenaar_functie = '{{ function }}'
     {% endfor %}
 
+    # Medischecategorie:
     required list 'Indien gewenst, verander optioneel de Medische Categorie van deze brief.' = '{{ config.defaultmedischecategorie }}' -> $medischecategorie_default:
-        'Medisch Polis'
-        'Medisch Machtiging'
-        'Medisch Declaratie'
-        'Medisch Declaratie Dossier'
-        'Medisch Zorgbemiddel'
-        'Medisch Verhaal'
-        'Medisch AWBZ'
-        'Medisch Arbo'
-        'Polis'
-        'Standaard'
-        'Marketing'
-        'Financieel'
+        {% for mc in medischecategorie %}
+        '{{ mc }}'
+        {% endfor %}
 
 step '{{ doc_name}}', 'Buitenland':
     {% for ctrl in controls %}

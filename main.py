@@ -41,16 +41,30 @@ def word2wiz(path):
     questions = config.parse_defaults(questions)
     # Transform the rest of the questions in controls
     controls = [Control(q) for q in questions]
-    # Medewerkers for step 1
+    # Medewerkers for step 1 (name, last name, function)
     medewerkers = [
         ('Margot',    'Smits',       'Senior medisch adviseur'),
         ('Wendy',     'Haanschoten', 'Adviserend apotheker'),
         ('Marjolein', 'Rijkeboer',   'Adviserend psycholoog'),
         ('Herman',    'Flens',       'Medisch adviseur'),
         ('Job',       'van Huizen',  'Medisch adviseur')]
+    medischecategorie = [
+        'Medisch Polis',
+        'Medisch Machtiging',
+        'Medisch Declaratie',
+        'Medisch Declaratie Dossier',
+        'Medisch Zorgbemiddel',
+        'Medisch Verhaal',
+        'Medisch AWBZ',
+        'Medisch Arbo',
+        'Polis',
+        'Standaard',
+        'Marketing',
+        'Financieel']
     print(main_template.render(doc_name=splitext(basename(path))[0],
                                config=config,
                                medewerkers=medewerkers,
+                               medischecategorie=medischecategorie,
                                controls=controls))
 
 if __name__ == "__main__":
