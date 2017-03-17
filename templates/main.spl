@@ -1,0 +1,44 @@
+
+step 'First Algemeen', 'Buitenland':
+    # Set metadatas?
+    'ReferentieNummer' -> $org_RefNr
+    required 'Onderwerp:' -> $briefonderwerp
+    label = 'Ondertekenaar'
+    required radio '' = medewerker:
+        {% for name, lastname, function in medewerkers %}
+        label = '{{ name }} {{ lastname }} - {{ function }}' as {{ ( name + '_' + lastname )|replace(' ', '_')|lower }}
+        {% endfor %}
+        # Custom medewerker
+        multi:
+            string -> $ondertekenaar_naam
+            list = "Medewerker Declaratieservice" -> $ondertekenaar_functie:
+                'Medewerker declaratieservice'
+                'Klachtcoördinator'
+                'Klachtbehandelaar'
+                'Specialist machtigingen'
+    {% for name, lastname, function in medewerkers %}
+    when medewerker == '{{ ( name + '_' + lastname )|replace(' ', '_')|lower }}':
+        $ondertekenaar_naam = '{{ name }} {{ lastname }}'
+        $ondertekenaar_functie = '{{ function }}'
+    {% endfor %}
+    required list 'Indien gewenst, verander optioneel de Medische Categorie van deze brief.' = 'Medisch Declaratie' -> $medischecategorie_default:
+        'Medisch Polis'
+        'Medisch Machtiging'
+        'Medisch Declaratie'
+        'Medisch Declaratie Dossier'
+        'Medisch Zorgbemiddel'
+        'Medisch Verhaal'
+        'Medisch AWBZ'
+        'Medisch Arbo'
+        'Polis'
+        'Standaard'
+        'Marketing'
+        'Financieel'
+
+step 'Second step', 'variable data':
+    {% for question in questions %}
+    '{{ question }}' = $metadata{{loop.index}} -> $metadata{{loop.index}}
+    {% endfor %}
+
+step 'EINDE', 'BUITENLAND':
+    label = 'Het document is klaar'
