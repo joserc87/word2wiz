@@ -18,7 +18,7 @@ class Control:
             self.type = 'checkbox'
             parts = string.split(';')
             self.question = parts[0][len('checkbox '):]
-            self.label = parts[2]
+            self.label = parts[-1]
         elif string.startswith('line'):
             # used to output a line between questions (it's just a label)
             self.type = 'line'
@@ -61,15 +61,15 @@ def word2wiz(path):
         'Standaard',
         'Marketing',
         'Financieel']
-    print(main_template.render(doc_name=splitext(basename(path))[0],
-                               config=config,
-                               medewerkers=medewerkers,
-                               medischecategorie=medischecategorie,
-                               controls=controls))
+    return main_template.render(doc_name=splitext(basename(path))[0],
+                                config=config,
+                                medewerkers=medewerkers,
+                                medischecategorie=medischecategorie,
+                                controls=controls)
 
 if __name__ == "__main__":
     if len(sys.argv) < 2:
         print('Wrong number of arguments.')
         print('Usage: python main.py INPUT_FILE.docx')
     else:
-        word2wiz(sys.argv[1])
+        print(word2wiz(sys.argv[1]))
