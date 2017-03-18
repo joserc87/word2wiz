@@ -29,7 +29,7 @@ class Control:
 
 def word2wiz(path):
     # Jinja2
-    env = Environment(loader=FileSystemLoader('templates'),
+    env = Environment(loader=FileSystemLoader('spell'),
                       trim_blocks=True,
                       lstrip_blocks=True)
     main_template = env.get_template('main.spl')
