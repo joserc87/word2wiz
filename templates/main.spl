@@ -1,3 +1,4 @@
+# Created by TCF parseWord
 step 'First Algemeen', 'Buitenland':
     # Set metadatas?
     'ReferentieNummer' -> $org_RefNr
@@ -53,7 +54,7 @@ step 'BIJLAGE', 'Buitenland':
     label '' = 'Bijlage 1 t/m 5 omschrijving, bestand (PDF)'
     {% for i in range(5) %}
     '' -> $bijlage_oms_{{ '{:02d}'.format(i+1) }}
-    attachment -> bijlage_code_{{ '{:02d}'.format(i+1) }}
+    attachment -> $bijlage_code_{{ '{:02d}'.format(i+1) }}
     {% endfor %}
 
 step 'EINDE', 'BUITENLAND' as einde
