@@ -1,5 +1,7 @@
+#!/usr/bin/python
+
 import os
-from flask import render_template, Flask, request, Response, send_from_directory
+from flask import render_template, Flask, request, send_from_directory
 from subprocess import Popen, PIPE
 from word2wiz import word2wiz
 
