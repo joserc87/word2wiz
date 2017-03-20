@@ -1,7 +1,7 @@
 # Created by TCF parseWord
-step 'First Algemeen', 'Buitenland':
+step 'Algemeen', 'Buitenland':
     # Set metadatas?
-    'ReferentieNummer' -> $org_RefNr
+    'Referentienummer' -> $org_RefNr
     required 'Onderwerp:' = '{{ config.defaultonderwerptekst }}' -> $briefonderwerp
     label = 'Ondertekenaar'
     required radio '' = '{{ config.defaultondertekenaar }}' as medewerker:
