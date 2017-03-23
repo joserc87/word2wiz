@@ -64,11 +64,11 @@ def preprocess_question(question):
 
 
 def preprocess_questions(questions):
-    questions = remove_unwanted_matches(questions)
     # Remove duplicates
     questions = list(OrderedDict.fromkeys(questions))
     # Trim spaces
     questions = [preprocess_question(q) for q in questions]
+    questions = remove_unwanted_matches(questions)
     return questions
 
 
