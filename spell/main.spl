@@ -36,9 +36,9 @@ step '{{ doc_name}}', 'Buitenland':
     {% if ctrl.type == 'string' %}
     '{{ ctrl.question }}' -> $txt_{{loop.index}}
     {% elif ctrl.type == 'checkbox' %}
-    checkbox(label='{{ ctrl.label }}') '' -> $txt_{{loop.index}}
+    checkbox(@label='{{ ctrl.label }}') '' -> $txt_{{loop.index}}
     {% elif ctrl.type == 'list' %}
-    list '{{ ctrl.question }}' -> $txt_{{loop.index}}:
+    required list '{{ ctrl.question }}' -> $txt_{{loop.index}}:
         {% for val in ctrl.values %}
         '{{ val }}'
         {% endfor %}
@@ -57,5 +57,5 @@ step 'BIJLAGE', 'Buitenland':
     attachment -> $bijlage_code_{{ '{:02d}'.format(i+1) }}
     {% endfor %}
 
-step 'EINDE', 'BUITENLAND' as einde
-    label = 'Het document is klaar'
+step 'EINDE', 'BUITENLAND' as einde:
+    label '' = 'Het document is klaar'
