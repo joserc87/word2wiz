@@ -1,6 +1,7 @@
 #!/usr/bin/python
 
 import sys
+from collections import OrderedDict
 from os.path import basename, splitext
 import word
 from config import Config
@@ -61,6 +62,8 @@ def word2wiz(path):
     questions = config.parse_defaults(questions)
     # Filter out unwanted matches
     questions = remove_unwanted_matches(questions)
+    # Remove duplicates
+    questions = list(OrderedDict.fromkeys(questions))
     # Transform the rest of the questions in controls
     controls = [Control(q) for q in questions]
     # Medewerkers for step 1 (name, last name, function)
