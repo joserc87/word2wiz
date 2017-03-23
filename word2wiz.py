@@ -11,6 +11,7 @@ from jinja2 import Environment, FileSystemLoader
 
 class Control:
     def __init__(self, string):
+        self.metadata_name = None
         # Get the desired control type from the string
         if string.startswith('list '):
             self.type = 'list'
@@ -64,6 +65,16 @@ def preprocess_questions(questions):
     return questions
 
 
+def create_controls(questions):
+    # Transform the rest of the questions in controls
+    controls = [Control(q) for q in questions]
+    # Assign metadatas to controls
+    for i, control in enumerate(controls):
+        if control.type != 'line':
+            control.metadata_name = 'txt_{:03d}'.format(i + 1)
+    return controls
+
+
 def word2wiz(path):
     # Jinja2
     env = Environment(loader=FileSystemLoader('spell'),
@@ -78,8 +89,7 @@ def word2wiz(path):
     questions = config.parse_defaults(questions)
     # Remove unwanted matches, duplicates, spaces, etc
     questions = preprocess_questions(questions)
-    # Transform the rest of the questions in controls
-    controls = [Control(q) for q in questions]
+    controls = create_controls(questions)
     # Medewerkers for step 1 (name, last name, function)
     medewerkers = [
         ('Margot',    'Smits',       'Senior medisch adviseur'),
