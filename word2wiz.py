@@ -1,16 +1,23 @@
 #!/usr/bin/python
+"""
+Reads a word document (docx format) and generates a spell based on the markers
+found in the document. The spell is printed on the standard output by default
+"""
 
-import sys
+import argparse
 from collections import OrderedDict
-import re
 from os.path import basename, splitext
-import word
-from config import Config
+import re
+
 from jinja2 import Environment, FileSystemLoader
+
+from config import Config
+import word
 
 
 class Control:
     def __init__(self, string):
+        self.original_string = string
         self.metadata_name = None
         # Get the desired control type from the string
         if string.startswith('list '):
@@ -70,8 +77,7 @@ def create_controls(questions):
     controls = [Control(q) for q in questions]
     # Assign metadatas to controls
     for i, control in enumerate(controls):
-        if control.type != 'line':
-            control.metadata_name = 'txt_{:03d}'.format(i + 1)
+        control.metadata_name = 'txt_{:03d}'.format(i + 1)
     return controls
 
 
@@ -110,15 +116,56 @@ def word2wiz(path):
         'Standaard',
         'Marketing',
         'Financieel']
-    return main_template.render(doc_name=splitext(basename(path))[0],
-                                config=config,
-                                medewerkers=medewerkers,
-                                medischecategorie=medischecategorie,
-                                controls=controls)
+    spell = main_template.render(doc_name=splitext(basename(path))[0],
+                                 config=config,
+                                 medewerkers=medewerkers,
+                                 medischecategorie=medischecategorie,
+                                 controls=controls)
+    report = '\n'.join(['VELD: {0} >> METADATANAAM: {1}'.format(
+        control.original_string,
+        control.metadata_name) for control in controls])
+
+    return (spell, report)
+
+
+def main():
+    description = 'Create a spell configuration from a Microsoft Word document'
+    parser = argparse.ArgumentParser(description=description)
+
+    parser.add_argument('input_file',
+                        nargs=1,
+                        metavar='FILE',
+                        help='the input word document')
+
+    parser.add_argument('-o', '--output',
+                        help='the file for the output spell (stdout by default)'
+                        )
+
+    parser.add_argument('--report',
+                        help='the ouput report file containing the fields and' +
+                        'the metadatas they are linked to')
+    # Parse
+    args = parser.parse_args()
+
+    # Run
+    spell, report = word2wiz(args.input_file[0])
+
+    if args.output:
+        # Write the spell
+        with open(args.output, 'w') as output_file:
+            output_file.write(spell)
+    else:
+        # By default, print the spell on the stdout
+        print(spell)
+
+    if args.report:
+        # Write the report
+        with open(args.report, 'w') as report_file:
+            report_file.write(report)
+    elif args.output:
+        # Only print the report if the spell hasn't been printed
+        print(report)
+
 
 if __name__ == "__main__":
-    if len(sys.argv) < 2:
-        print('Wrong number of arguments.')
-        print('Usage: python main.py INPUT_FILE.docx')
-    else:
-        print(word2wiz(sys.argv[1]))
+    main()
