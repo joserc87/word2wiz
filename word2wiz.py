@@ -2,6 +2,7 @@
 
 import sys
 from collections import OrderedDict
+import re
 from os.path import basename, splitext
 import word
 from config import Config
@@ -14,20 +15,20 @@ class Control:
         if string.startswith('list '):
             self.type = 'list'
             parts = string.split(';')
-            self.question = parts[0][len('list '):]
-            self.values = parts[1:]
+            self.question = parts[0][len('list'):].strip()
+            self.values = [val.strip() for val in parts[1:]]
         elif string.startswith('checkbox '):
             self.type = 'checkbox'
             parts = string.split(';')
-            self.question = parts[0][len('checkbox '):]
-            self.label = parts[-1]
+            self.question = parts[0][len('checkbox'):].strip()
+            self.label = parts[-1].strip()
         elif string.startswith('line'):
             # used to output a line between questions (it's just a label)
             self.type = 'line'
         else:
             # Otherwise it's a string control
             self.type = 'string'
-            self.question = string
+            self.question = string.strip()
 
 
 def remove_unwanted_matches(questions, file_path='data/unwanted_matches.txt'):
@@ -48,6 +49,21 @@ def remove_unwanted_matches(questions, file_path='data/unwanted_matches.txt'):
     return filtered_questions
 
 
+def preprocess_question(question):
+    question = question.strip()
+    question = re.sub('\s+', ' ', question)
+    return question
+
+
+def preprocess_questions(questions):
+    questions = remove_unwanted_matches(questions)
+    # Remove duplicates
+    questions = list(OrderedDict.fromkeys(questions))
+    # Trim spaces
+    questions = [preprocess_question(q) for q in questions]
+    return questions
+
+
 def word2wiz(path):
     # Jinja2
     env = Environment(loader=FileSystemLoader('spell'),
@@ -60,10 +76,8 @@ def word2wiz(path):
     # Take out the questions that are just for the configuration part
     config = Config()
     questions = config.parse_defaults(questions)
-    # Filter out unwanted matches
-    questions = remove_unwanted_matches(questions)
-    # Remove duplicates
-    questions = list(OrderedDict.fromkeys(questions))
+    # Remove unwanted matches, duplicates, spaces, etc
+    questions = preprocess_questions(questions)
     # Transform the rest of the questions in controls
     controls = [Control(q) for q in questions]
     # Medewerkers for step 1 (name, last name, function)
