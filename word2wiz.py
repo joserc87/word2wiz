@@ -6,6 +6,7 @@ import word
 from config import Config
 from jinja2 import Environment, FileSystemLoader
 
+
 class Control:
     def __init__(self, string):
         # Get the desired control type from the string
@@ -27,6 +28,25 @@ class Control:
             self.type = 'string'
             self.question = string
 
+
+def remove_unwanted_matches(questions, file_path='data/unwanted_matches.txt'):
+    """
+    Loads the unwanted matches from unwanted_matches.txt (by default), and
+    returns a list with the questions that do not match.
+    Args:
+        questions(list): A list of strings with all the matches
+        file_path(str): Optional. The file that contains the unwanted matches.
+    Returns:
+        The input list minus the questions that are in the unwanted_matches.txt.
+    """
+    filtered_questions = questions
+    with open(file_path) as f:
+        for unwanted_match in f.read().splitlines():
+            if unwanted_match in filtered_questions:
+                filtered_questions.remove(unwanted_match)
+    return filtered_questions
+
+
 def word2wiz(path):
     # Jinja2
     env = Environment(loader=FileSystemLoader('spell'),
@@ -36,9 +56,11 @@ def word2wiz(path):
 
     # Get all the <<question>>s from the word document
     questions = word.analyse_doc(path)
-    # Take the questions that are just for the configuration part
+    # Take out the questions that are just for the configuration part
     config = Config()
     questions = config.parse_defaults(questions)
+    # Filter out unwanted matches
+    questions = remove_unwanted_matches(questions)
     # Transform the rest of the questions in controls
     controls = [Control(q) for q in questions]
     # Medewerkers for step 1 (name, last name, function)

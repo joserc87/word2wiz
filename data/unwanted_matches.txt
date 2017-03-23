@@ -1,0 +1,45 @@
+verwijderen
+altijd
+leeg invulveld (onderwerp brief)
+geslacht
+voorletters
+naam
+straat
+huisnummer
+postcode
+woonplaats
+land
+aanhef_naam
+doc-id invoeren
+d oc-id invoeren
+doc - id invoeren
+doc- id invoeren
+creatie_datum
+maak de volgende keuze. behandeling toets 1, consult toets 2, onderzoek toets 3,
+verznr/relnr
+mw_afdelingstelefoon
+mw_afdelingsfax
+mw_naam
+mw_initialen
+mw_afdeling
+org_internet
+org_dsadresverzekerden
+org_dspostcodeverzekerden
+org_dsplaatsverzekerden
+org_emailadresklachten
+org_adres
+org_postcode
+org_woonplaats
+org_internet
+org_banknrpremie
+org_naamrekeninghouder
+org_av_algemeen
+org_dsadreszorgverleners
+org_dspostcodezorgverleners
+org_dsplaatszorgverleners
+lb_uzovicode
+lb_internet
+lb_tekst
+LB_tekst
+lb _tekst
+lb_naam
