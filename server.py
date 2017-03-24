@@ -36,7 +36,10 @@ def generate_zip(docx):
     # Generate the spell
     spell, report = word2wiz(docx)
     # Compile the spell
-    p = Popen(['spell', '-pretty-print'],
+    p = Popen(['spell',
+               '-pretty-print',
+               '-document-types-xml', 'data/documenttypes-zorg.xml',
+               '-document-type', 'DOCWIZ'],
               stdin=PIPE, stdout=PIPE)
     stdout, stderr = p.communicate(input=bytes(spell, 'utf-8'))  # [0]
     wizard_configuration = stdout.decode()
