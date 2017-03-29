@@ -1,0 +1,8 @@
+[Unit]
+Description=uWSGI instance to serve word2wiz
+
+[Service]
+ExecStart=/bin/bash -c 'cd /vagrant; source word2wizenv/bin/activate; uwsgi --ini /etc/uwsgi/apps-enabled/uwsgi.ini'
+
+[Install]
+WantedBy=multi-user.target
