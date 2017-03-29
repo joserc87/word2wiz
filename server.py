@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/python3
 
 import os
 from flask import render_template, Flask, request, send_from_directory
@@ -91,4 +91,4 @@ def custom_static(filename):
                                mimetype='application/xml')
 
 if __name__ == "__main__":
-    app.run(host='0.0.0.0', port=80)
+    app.run()
