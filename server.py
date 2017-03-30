@@ -6,7 +6,7 @@ from subprocess import Popen, PIPE
 from word2wiz import word2wiz
 from zipfile import ZipFile
 
-UPLOAD_FOLDER = './uploads'
+UPLOAD_FOLDER = '/tmp'
 
 app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
@@ -80,7 +80,8 @@ def upload():
             filepath = os.path.join(app.config['UPLOAD_FOLDER'], filename)
             file.save(filepath)
             xmlfilepath = generate_zip(filepath)
-            return '{"status": "success", "file": "' + xmlfilepath + '"}'
+            return '{"status": "success", "file": "uploads/' + \
+                os.path.basename(xmlfilepath) + '"}'
     return '{"status": "error"}'
 
 
