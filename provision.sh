@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 apt-get update
-apt-get install -y python3 python3-pip nginx
+apt-get install -y python3 python3-pip nginx default-jre
 
 pip3 install --upgrade pip
 pip3 install virtualenv
@@ -45,6 +45,24 @@ cp $wwwroot/config/uwsgi/systemd/uwsgi.service /etc/systemd/system/uwsgi.service
 
 # When using vagrant, the services shuould wait until the sync directory is mounted:
 sed -i 's/WantedBy=multi-user.target/WantedBy=vagrant.mount/' /etc/systemd/system/uwsgi.service
+
+#########
+# SPELL #
+#########
+
+SPELL_VERSION=v0.2-alfa
+SPELL_PKG_NAME=spell-$SPELL_VERSION.tar
+SPELL_URL=https://github.com/joserc87/spell/releases/download/$SPELL_VERSION/$SPELL_PKG_NAME.tar
+
+# Instal spell (if not installed)
+if ! hash "spell" 2>/dev/null; then
+    cd /tmp
+    wget $SPELL_URL
+    tar -xvf $SPELL_PKG_NAME.tar
+    mv -R $SPELL_PKG_NAME /usr/local/bin
+    ln -s /usr/local/bin/$SPELL_PKG_NAME/bin/spell /usr/local/bin/spell
+    rm $SPELL_PKG_NAME.tar
+fi
 
 # Reload systemd services
 systemctl daemon-reload
