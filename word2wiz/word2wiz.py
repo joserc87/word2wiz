@@ -5,14 +5,13 @@ found in the document. The spell is printed on the standard output by default
 """
 
 import argparse
-from collections import OrderedDict
 from os.path import basename, splitext
-import re
 
 from jinja2 import Environment, FileSystemLoader
 
 from config import Config
 import word
+import mark_parser
 
 
 class Control:
@@ -39,36 +38,6 @@ class Control:
             self.question = string.strip()
 
 
-def remove_unwanted_matches(questions, file_path='data/unwanted_matches.txt'):
-    """
-    Loads the unwanted matches from unwanted_matches.txt (by default), and
-    returns a list with the questions that do not match.
-    Args:
-        questions(list): A list of strings with all the matches
-        file_path(str): Optional. The file that contains the unwanted matches.
-    Returns:
-        The input list minus the questions that are in the unwanted_matches.txt.
-    """
-    with open(file_path) as f:
-        unwanted_matches = [m for m in f.read().splitlines()]
-    return [q for q in questions if q not in unwanted_matches]
-
-
-def preprocess_question(question):
-    question = question.strip()
-    question = re.sub('\s+', ' ', question)
-    return question
-
-
-def preprocess_questions(questions):
-    # Remove duplicates
-    questions = list(OrderedDict.fromkeys(questions))
-    # Trim spaces
-    questions = [preprocess_question(q) for q in questions]
-    questions = remove_unwanted_matches(questions)
-    return questions
-
-
 def create_controls(questions):
     # Transform the rest of the questions in controls
     controls = [Control(q) for q in questions]
@@ -85,14 +54,14 @@ def word2wiz(path):
                       lstrip_blocks=True)
     main_template = env.get_template('main.spl')
 
-    # Get all the <<question>>s from the word document
-    questions = word.analyse_doc(path)
-    # Take out the questions that are just for the configuration part
+    # Get all the <<mark>>s from the word document
+    marks = word.analyse_doc(path)
+    # Take out the marks that are just for the configuration part
     config = Config()
-    questions = config.parse_defaults(questions)
+    marks = config.parse_defaults(marks)
     # Remove unwanted matches, duplicates, spaces, etc
-    questions = preprocess_questions(questions)
-    controls = create_controls(questions)
+    marks = mark_parser.preprocess_marks(marks)
+    controls = create_controls(marks)
     # Medewerkers for step 1 (name, last name, function)
     medewerkers = [
         ('Margot',    'Smits',       'Senior medisch adviseur'),
@@ -165,5 +134,4 @@ def main():
 
 
 if __name__ == "__main__":
-    import pdb; pdb.set_trace()  # XXX BREAKPOINT
     main()
