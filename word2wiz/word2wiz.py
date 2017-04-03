@@ -49,12 +49,9 @@ def remove_unwanted_matches(questions, file_path='data/unwanted_matches.txt'):
     Returns:
         The input list minus the questions that are in the unwanted_matches.txt.
     """
-    filtered_questions = questions
     with open(file_path) as f:
-        for unwanted_match in f.read().splitlines():
-            if unwanted_match in filtered_questions:
-                filtered_questions.remove(unwanted_match)
-    return filtered_questions
+        unwanted_matches = [m for m in f.read().splitlines()]
+    return [q for q in questions if q not in unwanted_matches]
 
 
 def preprocess_question(question):
