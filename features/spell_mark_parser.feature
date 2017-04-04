@@ -1,4 +1,4 @@
-Feature: Parsing marks
+Feature: Parsing control marks
     In order to transform the marks in the word document to a wizard
     configuration,
     As a user of the utility methods

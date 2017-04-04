@@ -1,6 +1,6 @@
 from collections import OrderedDict
 import re
-from .spell_helper import Step
+from .spell_helper import Step, make_control
 from .util import parse_mark
 
 DEFAULT_STEP_NAME = 'doc_name'
@@ -42,6 +42,7 @@ def get_steps(marks):
     Parses a list of marks and extracts the step-control hierarchy. It also
     links the metadatas to the controls.
     """
+    marks = preprocess_marks(marks)
     steps = [Step(DEFAULT_STEP_NAME, DEFAULT_STEP_GROUP_NAME)]
 
     for mark in marks:
@@ -51,5 +52,5 @@ def get_steps(marks):
             steps += [Step(step_name, DEFAULT_STEP_GROUP_NAME)]
         else:
             # If it's not a step mark,it must be a control
-            steps[-1].add_control(mark)
+            steps[-1].add_control(make_control(mark))
     return steps
