@@ -60,5 +60,25 @@ Feature: Getting steps from marks
               | item 1 |
               | item 2 |
 
-    # Scenario: Remove duplicates
-    # TODO
+    Scenario: Marks with duplicates
+        Given a list of marks
+            | mark                    |
+            | list question;v1;v2     |
+            | line                    |
+            | checkbox question;label |
+            | line                    |
+            | generic string question |
+            | list question;v1;v2     | # Duplicate
+            | line                    |
+            | checkbox question;label | # Duplicate
+            | line                    |
+            | generic string question | # Duplicate
+         When we get the steps for those marks
+         Then step 0 should have 7 controls
+          And control 0 in step 0 should be a list control
+          And control 1 in step 0 should be a line control
+          And control 2 in step 0 should be a checkbox control
+          And control 3 in step 0 should be a line control
+          And control 4 in step 0 should be a string control
+          And control 5 in step 0 should be a line control
+          And control 6 in step 0 should be a line control

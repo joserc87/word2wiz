@@ -8,11 +8,28 @@ class Step(object):
     def add_control(self, control):
         self.controls += [control]
 
+    def remove_duplicate_controls(self):
+        """Remove duplicate controls, except line controls"""
+        unique_controls = []
+        for control in self.controls:
+            for unique_control in unique_controls:
+                if control == unique_control and \
+                        not isinstance(control, LineControl):
+                    break
+            else:
+                unique_controls += [control]
+        self.controls = unique_controls
+
 
 class Control(object):
     def __init__(self, mark):
         self.original_mark = mark
         self.metadata_name = None
+        self.question = ""
+
+    def __eq__(self, other):
+        return (self.original_mark, self.metadata_name, self.question) == \
+            (other.original_mark, other.metadata_name, other.question)
 
 
 class ListControl(Control):
@@ -22,11 +39,20 @@ class ListControl(Control):
         self.question = parts[0]
         self.values = parts[1:]
 
+    def __eq__(self, other):
+        return super().__eq__(other) and \
+            isinstance(other, ListControl) and \
+            self.values == other.values
+
 
 class CheckboxControl(Control):
     def __init__(self, mark):
         super().__init__(mark)
         self.question, self.label = (part.strip() for part in mark.split(';'))
+
+    def __eq__(self, other):
+        return super().__eq__(other) and \
+            isinstance(other, CheckboxControl)
 
 
 class LineControl(Control):
@@ -34,11 +60,19 @@ class LineControl(Control):
         super().__init__(mark)
         self.question = ''
 
+    def __eq__(self, other):
+        return super().__eq__(other) and \
+            isinstance(other, LineControl)
+
 
 class StringControl(Control):
     def __init__(self, mark):
         super().__init__(mark)
         self.question = mark.strip()
+
+    def __eq__(self, other):
+        return super().__eq__(other) and \
+            isinstance(other, StringControl)
 
 
 def make_control(mark):

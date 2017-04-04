@@ -1,4 +1,3 @@
-from collections import OrderedDict
 import re
 from .spell_helper import Step, make_control
 from .util import parse_mark
@@ -22,19 +21,10 @@ def remove_unwanted_matches(marks, file_path='data/unwanted_matches.txt'):
     return [q for q in marks if q not in unwanted_matches]
 
 
-def preprocess_mark(mark):
+def trim_mark(mark):
     mark = mark.strip()
     mark = re.sub('\s+', ' ', mark)
     return mark
-
-
-def preprocess_marks(marks):
-    # Remove duplicates
-    marks = list(OrderedDict.fromkeys(marks))
-    # Trim spaces
-    marks = [preprocess_mark(q) for q in marks]
-    marks = remove_unwanted_matches(marks)
-    return marks
 
 
 def get_steps(marks):
@@ -42,7 +32,10 @@ def get_steps(marks):
     Parses a list of marks and extracts the step-control hierarchy. It also
     links the metadatas to the controls.
     """
-    marks = preprocess_marks(marks)
+    # Trim spaces
+    marks = [trim_mark(q) for q in marks]
+    marks = remove_unwanted_matches(marks)
+
     steps = [Step(DEFAULT_STEP_NAME, DEFAULT_STEP_GROUP_NAME)]
 
     for mark in marks:
@@ -53,4 +46,11 @@ def get_steps(marks):
         else:
             # If it's not a step mark,it must be a control
             steps[-1].add_control(make_control(mark))
+
+    # Remove duplicate controls
+    for step in steps:
+        step.remove_duplicate_controls()
+
+    # Assign metadatas
+
     return steps
