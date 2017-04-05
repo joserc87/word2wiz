@@ -1,5 +1,5 @@
 import re
-from .spell_helper import Step, make_control
+from .spell_helper import *
 from .util import parse_mark
 
 DEFAULT_STEP_NAME = 'doc_name'
@@ -27,6 +27,20 @@ def trim_mark(mark):
     return mark
 
 
+def get_metadata(metadata_num):
+    return 'txt_{:03d}'.format(metadata_num + 1)
+
+
+def assign_metadatas(steps):
+    i = 0
+    for step in steps:
+        for control in step.controls:
+            # <<line>> do not consume metadata
+            if not isinstance(control, LineControl):
+                control.metadata_name = get_metadata(i)
+                i += 1
+
+
 def get_steps(marks):
     """
     Parses a list of marks and extracts the step-control hierarchy. It also
@@ -52,5 +66,6 @@ def get_steps(marks):
         step.remove_duplicate_controls()
 
     # Assign metadatas
+    assign_metadatas(steps)
 
     return steps

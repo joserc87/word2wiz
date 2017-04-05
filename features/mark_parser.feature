@@ -82,3 +82,11 @@ Feature: Getting steps from marks
           And control 4 in step 0 should be a string control
           And control 5 in step 0 should be a line control
           And control 6 in step 0 should be a line control
+
+          And control 0 in step 0 should have metadata txt_001
+          And control 1 in step 0 should have no metadata
+          And control 2 in step 0 should have metadata txt_002
+          And control 3 in step 0 should have no metadata
+          And control 4 in step 0 should have metadata txt_003
+          And control 5 in step 0 should have no metadata
+          And control 6 in step 0 should have no metadata
