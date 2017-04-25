@@ -90,3 +90,4 @@ Feature: Getting steps from marks
           And control 4 in step 0 should have metadata txt_003
           And control 5 in step 0 should have no metadata
           And control 6 in step 0 should have no metadata
+

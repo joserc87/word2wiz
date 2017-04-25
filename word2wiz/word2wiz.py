@@ -12,6 +12,7 @@ from jinja2 import Environment, FileSystemLoader
 from .config import Config
 from . import word
 from . import mark_parser
+from .spell_helper import LineControl
 
 
 def generate_report(steps):
@@ -42,10 +43,16 @@ def generate_report(steps):
             metadata = control.metadata_name or ''
 
             # Add a new row
-            report += '| {0} | {1} | {2} |\n'.format(
-                step_name.ljust(max_step_length),
-                field.ljust(max_field_length),
-                metadata.ljust(max_metadata_length))
+            if isinstance(control, LineControl):
+                report += '| {0} +-{1}-+-{2}-+\n'.format(
+                    step_name.ljust(max_step_length),
+                    '-'*max_field_length,
+                    '-'*max_metadata_length)
+            else:
+                report += '| {0} | {1} | {2} |\n'.format(
+                    step_name.ljust(max_step_length),
+                    field.ljust(max_field_length),
+                    metadata.ljust(max_metadata_length))
 
             # Only show the step name on the first row
             step_name = ''
