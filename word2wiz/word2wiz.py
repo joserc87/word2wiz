@@ -19,7 +19,7 @@ def generate_report(steps):
     report = ''
     # Lengths of the step name, field and metadata, for formatting purposes
     max_step_length = max([len(step.name) for step in steps])
-    max_field_length = max([max([len(control.original_mark) for control in
+    max_field_length = max([max([len(control.question) for control in
                                  step.controls]) for step in steps])
     max_metadata_length = max([max([len(control.metadata_name or '')
                                     for control in step.controls])
@@ -39,7 +39,7 @@ def generate_report(steps):
     for step in steps:
         step_name = step.name or ''
         for control in step.controls:
-            field = control.original_mark or ''
+            field = control.question or ''
             metadata = control.metadata_name or ''
 
             # Add a new row

@@ -75,3 +75,21 @@ Feature: Generating a report
             +----------+------------+----------+
 
             """
+
+    Scenario: List items
+        Given a list of marks
+            | mark        |
+            | list question text;item 1;item 2 |
+            | question 2  |
+        When we get the steps for those marks
+         And we generate a report for those steps
+        Then the report should be
+            """
+            +----------+---------------+----------+
+            |   STEP   |     FIELD     | METADATA |
+            +----------+---------------+----------+
+            | doc_name | question text | txt_001  |
+            |          | question 2    | txt_002  |
+            +----------+---------------+----------+
+
+            """
