@@ -91,3 +91,19 @@ Feature: Getting steps from marks
           And control 5 in step 0 should have no metadata
           And control 6 in step 0 should have no metadata
 
+    Scenario: Step repeated multiple times
+        Given a list of marks
+            | mark |
+            | step Repeated step |
+            | step Repeated step |
+            | step Repeated step |
+        When we get the steps for those marks
+        Then there should be 4 steps
+         And name of step 0 should be "doc_name"
+         And name of step 1 should be "Repeated step"
+         And name of step 2 should be "Repeated step"
+         And name of step 3 should be "Repeated step"
+         And group name of step 0 should be "Buitenland"
+         And group name of step 1 should be "Buitenland"
+         And group name of step 2 should be "Buitenland"
+         And group name of step 3 should be "Buitenland"
