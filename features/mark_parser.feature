@@ -45,19 +45,6 @@ Feature: Getting steps from marks
           And the question for control 0 in step 0 should be "question 1"
           And the question for control 0 in step 1 should be "question 2"
 
-    Scenario: List controls should be required by default
-        Given a list of marks
-            | mark                                  |
-            | list Dit is de vraagtekst 1;nota;nota’s |
-            | list required Dit is de vraagtekst 2;nota;nota’s |
-            | list optional Dit is de vraagtekst 3;nota;nota’s |
-         When we get the steps for those marks
-         Then there should be 1 step
-          And step 0 should have 3 control
-          And control 0 in step 0 should be required
-          And control 1 in step 0 should be required
-          And control 2 in step 0 should not be required
-
     Scenario: Marks with inner spaces
         Given a list of marks
             | mark                                                |
@@ -72,6 +59,39 @@ Feature: Getting steps from marks
               | item   |
               | item 1 |
               | item 2 |
+
+
+    ############
+    # Required #
+    ############
+
+    Scenario: List controls should be required by default
+        Given a list of marks
+            | mark                                             |
+            | list Dit is de vraagtekst 1;nota;nota’s          |
+            | list required Dit is de vraagtekst 2;nota;nota’s |
+            | list optional Dit is de vraagtekst 3;nota;nota’s |
+         When we get the steps for those marks
+         Then step 0 should have 3 control
+          And control 0 in step 0 should be required
+          And control 1 in step 0 should be required
+          And control 2 in step 0 should not be required
+
+    Scenario: String controls should be optional by default
+        Given a list of marks
+            | mark                            |
+            | Dit is een invulveld 1          |
+            | optional Dit is een invulveld 2 |
+            | required Dit is een invulveld 3 |
+         When we get the steps for those marks
+         Then step 0 should have 3 control
+          And control 0 in step 0 should not be required
+          And control 1 in step 0 should not be required
+          And control 2 in step 0 should be required
+
+    ##############
+    # Duplicates #
+    ##############
 
     Scenario: Duplicated string controls are removed
         Given a list of marks
