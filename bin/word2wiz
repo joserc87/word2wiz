@@ -1,6 +1,0 @@
-#!/usr/bin/env python
-
-import word2wiz
-
-if __name__ == "__main__":
-    word2wiz.main()
