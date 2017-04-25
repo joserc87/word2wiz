@@ -1,5 +1,5 @@
 import re
-from .spell_helper import *
+from .spell_helper import Step, LineControl, make_control
 from .util import parse_mark
 
 DEFAULT_STEP_NAME = 'doc_name'

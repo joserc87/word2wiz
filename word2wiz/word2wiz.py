@@ -9,42 +9,48 @@ from os.path import basename, splitext
 
 from jinja2 import Environment, FileSystemLoader
 
-from config import Config
-import word
-import mark_parser
+from .config import Config
+from . import word
+from . import mark_parser
 
 
-class Control:
-    def __init__(self, string):
-        self.original_string = string
-        self.metadata_name = None
-        # Get the desired control type from the string
-        if string.startswith('list '):
-            self.type = 'list'
-            parts = string.split(';')
-            self.question = parts[0][len('list'):].strip()
-            self.values = [val.strip() for val in parts[1:]]
-        elif string.startswith('checkbox '):
-            self.type = 'checkbox'
-            parts = string.split(';')
-            self.question = parts[0][len('checkbox'):].strip()
-            self.label = parts[-1].strip()
-        elif string.startswith('line'):
-            # used to output a line between questions (it's just a label)
-            self.type = 'line'
-        else:
-            # Otherwise it's a string control
-            self.type = 'string'
-            self.question = string.strip()
+def generate_report(steps):
+    report = ''
+    # Lengths of the step name, field and metadata, for formatting purposes
+    max_step_length = max([len(step.name) for step in steps])
+    max_field_length = max([max([len(control.original_mark) for control in
+                                 step.controls]) for step in steps])
+    max_metadata_length = max([max([len(control.metadata_name) for control in
+                                    step.controls]) for step in steps])
+    max_step_length = max(max_step_length, len('STEP'))
+    max_field_length = max(max_field_length, len('FIELD'))
+    max_metadata_length = max(max_metadata_length, len('METADATA'))
+    # Heading:
+    heading = '| {0} | {1} | {2} |\n'.format(
+        'STEP'.center(max_step_length),
+        'FIELD'.center(max_field_length),
+        'METADATA'.center(max_metadata_length))
+    # Divider:
+    divider = '+-{0}-+-{1}-+-{2}-+\n'.format(
+        '-'*max_step_length, '-'*max_field_length, '-'*max_metadata_length)
+    report = divider + heading + divider
+    for step in steps:
+        step_name = step.name or ''
+        for control in step.controls:
+            field = control.original_mark or ''
+            metadata = control.metadata_name or ''
 
+            # Add a new row
+            report += '| {0} | {1} | {2} |\n'.format(
+                step_name.ljust(max_step_length),
+                field.ljust(max_field_length),
+                metadata.ljust(max_metadata_length))
 
-def create_controls(questions):
-    # Transform the rest of the questions in controls
-    controls = [Control(q) for q in questions]
-    # Assign metadatas to controls
-    for i, control in enumerate(controls):
-        control.metadata_name = 'txt_{:03d}'.format(i + 1)
-    return controls
+            # Only show the step name on the first row
+            step_name = ''
+        # Add a divider between steps
+        report += divider
+    return report
 
 
 def word2wiz(path):
@@ -56,12 +62,16 @@ def word2wiz(path):
 
     # Get all the <<mark>>s from the word document
     marks = word.analyse_doc(path)
+
     # Take out the marks that are just for the configuration part
     config = Config()
     marks = config.parse_defaults(marks)
-    # Remove unwanted matches, duplicates, spaces, etc
-    marks = mark_parser.preprocess_marks(marks)
-    controls = create_controls(marks)
+
+    # The steps will have the name of the document
+    mark_parser.DEFAULT_STEP_NAME = splitext(basename(path))[0]
+    # Parse the marks and get the step-control hierarchy
+    steps = mark_parser.get_steps(marks)
+
     # Medewerkers for step 1 (name, last name, function)
     medewerkers = [
         ('Margot',    'Smits',       'Senior medisch adviseur'),
@@ -86,10 +96,8 @@ def word2wiz(path):
                                  config=config,
                                  medewerkers=medewerkers,
                                  medischecategorie=medischecategorie,
-                                 controls=controls)
-    report = '\n'.join(['VELD: {0} >> METADATANAAM: {1}'.format(
-        control.original_string,
-        control.metadata_name) for control in controls])
+                                 steps=steps)
+    report = generate_report(steps)
 
     return (spell, report)
 
