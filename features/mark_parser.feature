@@ -123,6 +123,18 @@ Feature: Getting steps from marks
           And control 1 in step 0 should be a line control
           And control 2 in step 0 should be a line control
 
+    Scenario: Duplicated labels are not removed
+        Given a list of marks
+            | mark                     |
+            | text Dit is gewoon tekst |
+            | text Dit is gewoon tekst |
+            | text Dit is gewoon tekst |
+         When we get the steps for those marks
+         Then step 0 should have 3 controls
+          And control 0 in step 0 should be a label control
+          And control 1 in step 0 should be a label control
+          And control 2 in step 0 should be a label control
+
     Scenario: Duplicated steps are not removed
         Given a list of marks
             | mark |

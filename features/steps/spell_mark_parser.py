@@ -17,7 +17,8 @@ def step_impl(context, type_control):
         'list': ListControl,
         'checkbox': CheckboxControl,
         'string': StringControl,
-        'line': LineControl
+        'line': LineControl,
+        'label': LabelControl,
     }
     assert_that(type_control, is_in(control_types.keys()))
     assert_that(context.result, instance_of(control_types[type_control]))
@@ -37,3 +38,9 @@ def step_impl(context, label):
 def step_impl(context):
     items = [row['item'] for row in context.table]
     assert_that(context.result.values, equal_to(items))
+
+# Text:
+@then('the default value should be "{default_value}"')
+@then('the default value should be empty')
+def step_impl(context, default_value=''):
+    assert_that(context.result.default_value, equal_to(default_value))

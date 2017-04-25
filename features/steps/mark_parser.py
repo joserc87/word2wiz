@@ -31,7 +31,8 @@ def step_impl(context, control_num, step_num, type_control):
         'list': ListControl,
         'checkbox': CheckboxControl,
         'string': StringControl,
-        'line': LineControl
+        'line': LineControl,
+        'label': LabelControl
     }
     assert_that(type_control, is_in(control_types.keys()))
     assert_that(control, instance_of(control_types[type_control]))

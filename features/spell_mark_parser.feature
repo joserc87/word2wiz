@@ -33,3 +33,10 @@ Feature: Parsing control marks
               | item            |
               | 1 nota          |
               | meerdere nota’s |
+
+    Scenario: Text mark
+        Given a mark with content "text Dit is gewoon tekst"
+         When we make a control from that mark
+         Then it should create a label control
+          And the question should be empty
+          And the default value should be "Dit is gewoon tekst"

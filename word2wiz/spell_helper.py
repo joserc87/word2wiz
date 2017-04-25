@@ -78,15 +78,29 @@ class StringControl(Control):
             isinstance(other, StringControl)
 
 
+class LabelControl(Control):
+    def __init__(self, mark):
+        super().__init__(mark)
+        self.question = ''
+        self.default_value = mark.strip()
+
+    def __eq__(self, other):
+        return super().__eq__(other) and \
+            isinstance(other, LabelControl)
+
+
 def make_control(mark):
     """
     Factory method to create different kinds of controls
     """
     words = mark.split()
-    types = {'list': ListControl,
-             'checkbox': CheckboxControl,
-             'line': LineControl,
-             'string': StringControl}
+    types = {
+        'list': ListControl,
+        'checkbox': CheckboxControl,
+        'line': LineControl,
+        'string': StringControl,
+        'text': LabelControl
+    }
     modifiers = ['required',
                  'optional']
     found_modifiers = []
