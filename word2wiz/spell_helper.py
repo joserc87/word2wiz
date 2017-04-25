@@ -26,6 +26,7 @@ class Control(object):
         self.original_mark = mark
         self.metadata_name = None
         self.question = ""
+        self.required = False
 
     def __eq__(self, other):
         return (self.original_mark, self.metadata_name, self.question) == \
@@ -38,6 +39,7 @@ class ListControl(Control):
         parts = [part.strip() for part in mark.split(';')]
         self.question = parts[0]
         self.values = parts[1:]
+        self.required = True
 
     def __eq__(self, other):
         return super().__eq__(other) and \

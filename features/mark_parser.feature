@@ -45,6 +45,19 @@ Feature: Getting steps from marks
           And the question for control 0 in step 0 should be "question 1"
           And the question for control 0 in step 1 should be "question 2"
 
+    Scenario: List controls should be required by default
+        Given a list of marks
+            | mark                                  |
+            | list Dit is de vraagtekst 1;nota;nota’s |
+            | list required Dit is de vraagtekst 2;nota;nota’s |
+            | list optional Dit is de vraagtekst 3;nota;nota’s |
+         When we get the steps for those marks
+         Then there should be 1 step
+          And step 0 should have 3 control
+          And control 0 in step 0 should be required
+          And control 1 in step 0 should be required
+          And control 2 in step 0 should not be required
+
     Scenario: Marks with inner spaces
         Given a list of marks
             | mark                                                |

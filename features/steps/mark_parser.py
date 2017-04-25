@@ -64,3 +64,13 @@ def step_impl(context, control_num, step_num):
 def step_impl(context, control_num, step_num, metadata=None):
     control = context.steps[step_num].controls[control_num]
     assert_that(control.metadata_name, equal_to(metadata))
+
+@then('control {control_num:d} in step {step_num:d} should be required')
+def step_impl(context, control_num, step_num):
+    control = context.steps[step_num].controls[control_num]
+    assert_that(control.required, equal_to(True))
+
+@then('control {control_num:d} in step {step_num:d} should not be required')
+def step_impl(context, control_num, step_num):
+    control = context.steps[step_num].controls[control_num]
+    assert_that(control.required, equal_to(False))
