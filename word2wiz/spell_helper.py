@@ -14,7 +14,8 @@ class Step(object):
         for control in self.controls:
             for unique_control in unique_controls:
                 if control == unique_control and \
-                        not isinstance(control, LineControl):
+                        (isinstance(control, ListControl) or
+                         isinstance(control, StringControl)):
                     break
             else:
                 unique_controls += [control]

@@ -73,38 +73,57 @@ Feature: Getting steps from marks
               | item 1 |
               | item 2 |
 
-    Scenario: Marks with duplicates
+    Scenario: Duplicated string controls are removed
         Given a list of marks
-            | mark                    |
-            | list question;v1;v2     |
-            | line                    |
-            | checkbox question;label |
-            | line                    |
-            | generic string question |
-            | list question;v1;v2     | # Duplicate
-            | line                    |
-            | checkbox question;label | # Duplicate
-            | line                    |
-            | generic string question | # Duplicate
+            | mark                                  |
+            | required generic question |
+            | required generic question |
+            | required generic question |
+            | another question |
          When we get the steps for those marks
-         Then step 0 should have 7 controls
+         Then step 0 should have 2 controls
+          And control 0 in step 0 should be a string control
+          And control 1 in step 0 should be a string control
+
+    Scenario: Duplicated list controls are removed
+        Given a list of marks
+            | mark                                  |
+            | list Dit is de vraagtekst;nota;nota’s |
+            | list Dit is de vraagtekst;nota;nota’s |
+            | list Dit is de vraagtekst;nota;nota’s |
+            | list Dit is de vraagtekst;nota;nota’s2 |
+         When we get the steps for those marks
+         Then step 0 should have 2 control
           And control 0 in step 0 should be a list control
-          And control 1 in step 0 should be a line control
+          And control 1 in step 0 should be a list control
+
+    Scenario: Duplicated checkboxes are not removed
+        Given a list of marks
+            | mark                                  |
+            | checkbox question;label |
+            | checkbox question;label |
+            | checkbox required question2;label2 |
+            | checkbox required question2;label2 |
+         When we get the steps for those marks
+         Then step 0 should have 4 controls
+          And control 0 in step 0 should be a checkbox control
+          And control 1 in step 0 should be a checkbox control
           And control 2 in step 0 should be a checkbox control
-          And control 3 in step 0 should be a line control
-          And control 4 in step 0 should be a string control
-          And control 5 in step 0 should be a line control
-          And control 6 in step 0 should be a line control
+          And control 3 in step 0 should be a checkbox control
 
-          And control 0 in step 0 should have metadata txt_001
-          And control 1 in step 0 should have no metadata
-          And control 2 in step 0 should have metadata txt_002
-          And control 3 in step 0 should have no metadata
-          And control 4 in step 0 should have metadata txt_003
-          And control 5 in step 0 should have no metadata
-          And control 6 in step 0 should have no metadata
+    Scenario: Duplicated lines are not removed
+        Given a list of marks
+            | mark                                  |
+            | line |
+            | line |
+            | line |
+         When we get the steps for those marks
+         Then step 0 should have 3 controls
+          And control 0 in step 0 should be a line control
+          And control 1 in step 0 should be a line control
+          And control 2 in step 0 should be a line control
 
-    Scenario: Step repeated multiple times
+    Scenario: Duplicated steps are not removed
         Given a list of marks
             | mark |
             | step Repeated step |
