@@ -78,9 +78,9 @@ Feature: Generating a report
 
     Scenario: List items
         Given a list of marks
-            | mark        |
+            | mark                             |
             | list question text;item 1;item 2 |
-            | question 2  |
+            | question 2                       |
         When we get the steps for those marks
          And we generate a report for those steps
         Then the report should be

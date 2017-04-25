@@ -95,7 +95,7 @@ Feature: Getting steps from marks
 
     Scenario: Duplicated string controls are removed
         Given a list of marks
-            | mark                                  |
+            | mark                      |
             | required generic question |
             | required generic question |
             | required generic question |
@@ -119,9 +119,9 @@ Feature: Getting steps from marks
 
     Scenario: Duplicated checkboxes are not removed
         Given a list of marks
-            | mark                                  |
-            | checkbox question;label |
-            | checkbox question;label |
+            | mark                               |
+            | checkbox question;label            |
+            | checkbox question;label            |
             | checkbox required question2;label2 |
             | checkbox required question2;label2 |
          When we get the steps for those marks
@@ -133,7 +133,7 @@ Feature: Getting steps from marks
 
     Scenario: Duplicated lines are not removed
         Given a list of marks
-            | mark                                  |
+            | mark |
             | line |
             | line |
             | line |
@@ -157,7 +157,7 @@ Feature: Getting steps from marks
 
     Scenario: Duplicated steps are not removed
         Given a list of marks
-            | mark |
+            | mark               |
             | step Repeated step |
             | step Repeated step |
             | step Repeated step |
