@@ -1,0 +1,14 @@
+{% macro render_control(control) %}
+{% if control.type == 'string' %}
+'{{ control.question }}' -> ${{ control.metadata_name }}
+{% elif control.type == 'checkbox' %}
+checkbox(@label='{{ control.label }}') '' -> ${{ control.metadata_name }}
+{% elif control.type == 'list' %}
+required list '{{ control.question }}' -> ${{ control.metadata_name }}:
+    {% for val in control.values %}
+    '{{ val }}'
+    {% endfor %}
+{% elif control.type == 'line' %}
+label '' = '<hr style="height: 1px; border: 0px solid #CCCCCC; border-top-width:1px;" />'
+{% endif %}
+{% endmacro %}

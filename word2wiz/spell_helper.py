@@ -23,7 +23,8 @@ class Step(object):
 
 
 class Control(object):
-    def __init__(self, mark):
+    def __init__(self, type, mark):
+        self.type = type
         self.original_mark = mark
         self.metadata_name = None
         self.question = ""
@@ -36,7 +37,7 @@ class Control(object):
 
 class ListControl(Control):
     def __init__(self, mark):
-        super().__init__(mark)
+        super().__init__('list', mark)
         parts = [part.strip() for part in mark.split(';')]
         self.question = parts[0]
         self.values = parts[1:]
@@ -50,7 +51,8 @@ class ListControl(Control):
 
 class CheckboxControl(Control):
     def __init__(self, mark):
-        super().__init__(mark)
+        super().__init__('checkbox', mark)
+        self.type = 'checkbox'
         self.question, self.label = (part.strip() for part in mark.split(';'))
 
     def __eq__(self, other):
@@ -60,7 +62,7 @@ class CheckboxControl(Control):
 
 class LineControl(Control):
     def __init__(self, mark):
-        super().__init__(mark)
+        super().__init__('line', mark)
         self.question = ''
 
     def __eq__(self, other):
@@ -70,7 +72,7 @@ class LineControl(Control):
 
 class StringControl(Control):
     def __init__(self, mark):
-        super().__init__(mark)
+        super().__init__('string', mark)
         self.question = mark.strip()
 
     def __eq__(self, other):
@@ -80,7 +82,7 @@ class StringControl(Control):
 
 class LabelControl(Control):
     def __init__(self, mark):
-        super().__init__(mark)
+        super().__init__('label', mark)
         self.question = ''
         self.default_value = mark.strip()
 
