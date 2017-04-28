@@ -72,6 +72,8 @@ class CheckboxControl(Control):
     def default_value(self, value):
         if value is None:
             self._default_value = None
+        elif type(value) is bool:
+            self._default_value = value
         else:
             value = value.lower()
             if value in ['on', 'true', 'ja', 'yes', 'selected']:

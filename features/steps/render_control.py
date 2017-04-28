@@ -39,6 +39,16 @@ def step_impl(context, default_value):
     context.control.default_value = default_value
 
 
+@given('the control default value is true')
+def step_impl(context):
+    context.control.default_value = True
+
+
+@given('the control default value is false')
+def step_impl(context):
+    context.control.default_value = False
+
+
 @given('the control is optional')
 def step_impl(context):
     context.control.required = False
