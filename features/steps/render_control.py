@@ -24,6 +24,16 @@ def step_impl(context, question=''):
     context.control.question = question
 
 
+@given('the control question is hidden')
+def step_impl(context, question=''):
+    context.control.question_hidden = True
+
+
+@given('the control question is not hidden')
+def step_impl(context, question=''):
+    context.control.question_hidden = False
+
+
 @given('the control metadata is {metadata}')
 def step_impl(context, metadata):
     context.control.metadata_name = metadata

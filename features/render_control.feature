@@ -44,6 +44,19 @@ Feature: Rentering spell controls
 
              """
 
+    Scenario: A string control with hidden question
+        Given a string control from mark "Naam"
+          And the control question is "Naam"
+          And the control metadata is txt_123
+          And the control is optional
+          And the control question is hidden
+         When we render the control
+         Then the result should be
+             """
+             '' -> $txt_123
+
+             """
+
     ########
     # List #
     ########
@@ -86,6 +99,21 @@ Feature: Rentering spell controls
          Then the result should be
              """
              list 'Dit is de vraagtekst' = 'nota’s' -> $txt_list:
+                 'nota'
+                 'nota’s'
+
+             """
+
+    Scenario: A list control with hidden question
+        Given a list control from mark "Dit is de vraagtekst;nota;nota’s"
+          And the control question is "Dit is de vraagtekst"
+          And the control metadata is txt_list
+          And the control is required
+          And the control question is hidden
+         When we render the control
+         Then the result should be
+             """
+             required list '' -> $txt_list:
                  'nota'
                  'nota’s'
 
@@ -146,6 +174,20 @@ Feature: Rentering spell controls
          Then the result should be
              """
              checkbox(@label='Dit is een checkbox') '' = not selected -> $txt_checkbox
+
+             """
+
+    Scenario: A checkbox with hidden question
+        Given a checkbox control from mark "Dit is een checkbox"
+          And the control question is empty
+          And the control metadata is txt_checkbox
+          And the control label is "Dit is een checkbox"
+          And the control is optional
+          And the control question is hidden
+         When we render the control
+         Then the result should be
+             """
+             checkbox(@label='Dit is een checkbox') '' -> $txt_checkbox
 
              """
 
