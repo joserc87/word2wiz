@@ -62,16 +62,6 @@ class CheckboxControl(Control):
             isinstance(other, CheckboxControl)
 
 
-class LineControl(Control):
-    def __init__(self, mark):
-        super().__init__('line', mark)
-        self.question = ''
-
-    def __eq__(self, other):
-        return super().__eq__(other) and \
-            isinstance(other, LineControl)
-
-
 class StringControl(Control):
     def __init__(self, mark):
         super().__init__('string', mark)
@@ -91,6 +81,19 @@ class LabelControl(Control):
     def __eq__(self, other):
         return super().__eq__(other) and \
             isinstance(other, LabelControl)
+
+
+class LineControl(LabelControl):
+    def __init__(self, mark):
+        super().__init__(mark)
+        # Override type
+        self.type = 'line'
+        self.question = ''
+        self.default_value = '-'*50
+
+    def __eq__(self, other):
+        return super().__eq__(other) and \
+            isinstance(other, LineControl)
 
 
 def make_control(mark):

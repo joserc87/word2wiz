@@ -19,9 +19,7 @@
     {% for val in control.values %}
     '{{ val }}'
     {% endfor %}
-{% elif control.type == 'line' %}
-label '' = '<hr style="height: 1px; border: 0px solid #CCCCCC; border-top-width:1px;" />'
-{% elif control.type == 'label' %}
+{% elif control.type in ['label', 'line'] %}
 label '' = '{{ control.default_value }}'
 {% endif %}
 {% endmacro %}

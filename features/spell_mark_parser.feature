@@ -17,7 +17,9 @@ Feature: Parsing control marks
         Given a mark with content "line"
          When we make a control from that mark
          Then it should create a line control
+          And it should create a label control
           And the question should be empty
+          And the default value should be "--------------------------------------------------"
 
     Scenario: Checkbox mark
         Given a mark with content "checkbox  andere nota’s; Wij verwerkten andere nota’s"

@@ -109,3 +109,18 @@ Feature: Rentering spell controls
             label '' = 'Dit is gewoon tekst'
 
             """
+
+    ########
+    # Line #
+    ########
+
+    Scenario: A line
+        Given a line control from mark "line"
+         And the control question is empty
+         And the control metadata is null
+        When we render the control
+        Then the result should be
+            """
+            label '' = '--------------------------------------------------'
+
+            """
