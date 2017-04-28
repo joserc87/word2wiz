@@ -11,6 +11,8 @@ Feature: Parsing control marks
          Then it should create a string control
           And the question should be "Naam"
 
+    # TODO: Generic optional, generic requried, generic empty, default value, etc.
+
     Scenario: Line mark
         Given a mark with content "line"
          When we make a control from that mark

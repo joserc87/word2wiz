@@ -1,10 +1,21 @@
+{#
+ # _required
+ # Outputs "required " if the control is requires
+ #}
+{% macro _required(control) -%}
+{{ 'required ' if control.required else '' }}
+{%- endmacro %}
+{#
+ # render_control
+ # Returns the string for the spell of that control, ended in a new line
+ #}
 {% macro render_control(control) %}
 {% if control.type == 'string' %}
-'{{ control.question }}' -> ${{ control.metadata_name }}
+{{ _required(control) }}'{{ control.question }}' -> ${{ control.metadata_name }}
 {% elif control.type == 'checkbox' %}
-checkbox(@label='{{ control.label }}') '' -> ${{ control.metadata_name }}
+{{ _required(control) }}checkbox(@label='{{ control.label }}') '' -> ${{ control.metadata_name }}
 {% elif control.type == 'list' %}
-required list '{{ control.question }}' -> ${{ control.metadata_name }}:
+{{ _required(control) }}list '{{ control.question }}' -> ${{ control.metadata_name }}:
     {% for val in control.values %}
     '{{ val }}'
     {% endfor %}

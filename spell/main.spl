@@ -36,8 +36,8 @@ step 'Algemeen', 'Buitenland':
 {% for step in steps %}
 step '{{ step.name }}', '{{ step.group_name }}':
     {% for control in step.controls %}
-    {{ render_control(control) }}
-    {%- endfor %}
+    {{ render_control(control) | indent }}
+    {% endfor %}
     checkbox 'Bijlage(n) uploaden?' {% if config.defaultbijlageuploaden %}= selected{% endif %} as checkbox_bijlage
     when checkbox_bijlage is not selected:
         goto einde
