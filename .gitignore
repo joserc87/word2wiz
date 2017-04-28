@@ -4,3 +4,4 @@ __pycache__/
 /word2wizenv/
 /dist
 /build
+*.egg-info
