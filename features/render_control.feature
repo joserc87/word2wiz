@@ -92,3 +92,20 @@ Feature: Rentering spell controls
              required checkbox(@label='Dit is een checkbox') '' -> $txt_checkbox
 
              """
+
+    ########
+    # Text #
+    ########
+
+    Scenario: A simple text
+        Given a label control from mark "Dit is gewoon tekst"
+         And the control question is empty
+         And the control metadata is null
+         And the control default value is "Dit is gewoon tekst"
+         And the control is optional
+        When we render the control
+        Then the result should be
+            """
+            label '' = 'Dit is gewoon tekst'
+
+            """
