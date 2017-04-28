@@ -53,7 +53,9 @@ class CheckboxControl(Control):
     def __init__(self, mark):
         super().__init__('checkbox', mark)
         self.type = 'checkbox'
-        self.question, self.label = (part.strip() for part in mark.split(';'))
+        stripped = [part.strip() for part in mark.split(';')]
+        self.question, self.label = stripped if len(stripped) == 2 \
+            else ('', stripped[0])
 
     def __eq__(self, other):
         return super().__eq__(other) and \
