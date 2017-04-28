@@ -30,6 +30,7 @@ class Control(object):
         self.question = ""
         self.required = False
         self.default_value = None
+        self.question_hidden = False
 
     def __eq__(self, other):
         return (self.original_mark, self.metadata_name, self.question) == \
@@ -101,6 +102,7 @@ class LabelControl(Control):
         super().__init__('label', mark)
         self.question = ''
         self.default_value = mark.strip()
+        self.question_hidden = True
 
     def __eq__(self, other):
         return super().__eq__(other) and \
@@ -141,7 +143,9 @@ def make_control(mark):
         'text': LabelControl
     }
     modifiers = ['required',
-                 'optional']
+                 'optional',
+                 'empty'
+                 ]
     found_modifiers = []
 
     # The first element contains the type (or if it's not the type, then it's a
@@ -164,6 +168,8 @@ def make_control(mark):
         control.required = True
     elif 'optional' in found_modifiers:
         control.required = False
+    elif 'empty' in found_modifiers:
+        control.question_hidden = True
 
     # Set default value (if specified)
     if default_value is not None:

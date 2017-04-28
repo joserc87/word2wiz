@@ -36,6 +36,14 @@ def step_impl(context):
 def step_impl(context):
     assert_that(context.result.required, is_(False))
 
+@then('the question should be hidden')
+def step_impl(context):
+    assert_that(context.result.question_hidden, is_(True))
+
+@then('the question should not be hidden')
+def step_impl(context):
+    assert_that(context.result.question_hidden, is_(False))
+
 # Checkbox:
 @then('the label should be "{label}"')
 def step_impl(context, label):
