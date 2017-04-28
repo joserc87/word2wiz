@@ -29,6 +29,7 @@ class Control(object):
         self.metadata_name = None
         self.question = ""
         self.required = False
+        self.default_value = None
 
     def __eq__(self, other):
         return (self.original_mark, self.metadata_name, self.question) == \
@@ -56,10 +57,31 @@ class CheckboxControl(Control):
         stripped = [part.strip() for part in mark.split(';')]
         self.question, self.label = stripped if len(stripped) == 2 \
             else ('', stripped[0])
+        self._default_value = None
 
     def __eq__(self, other):
         return super().__eq__(other) and \
             isinstance(other, CheckboxControl)
+
+    @property
+    def default_value(self):
+        """Wrapper to make sure that the default_value is a boolean"""
+        return self._default_value
+
+    @default_value.setter
+    def default_value(self, value):
+        if value is None:
+            self._default_value = None
+        else:
+            value = value.lower()
+            if value in ['on', 'true', 'ja', 'yes', 'selected']:
+                self._default_value = True
+            elif value in ['off', 'false', 'nee', 'no', 'unselected',
+                           'not selected']:
+                self._default_value = False
+            else:
+                # TODO: Throw an exception?
+                pass
 
 
 class StringControl(Control):
@@ -100,6 +122,14 @@ def make_control(mark):
     """
     Factory method to create different kinds of controls
     """
+    # Exctract default value from the mark:
+    eq = mark.find('=')
+    default_value = None
+    if eq >= 0:
+        default_value = mark[eq+1:].strip()
+        mark = mark[:eq]
+
+    # Divide the mark in words
     words = mark.split()
     types = {
         'list': ListControl,
@@ -132,5 +162,9 @@ def make_control(mark):
         control.required = True
     elif 'optional' in found_modifiers:
         control.required = False
+
+    # Set default value (if specified)
+    if default_value is not None:
+        control.default_value = default_value
 
     return control

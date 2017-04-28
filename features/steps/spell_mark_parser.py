@@ -28,6 +28,14 @@ def step_impl(context, type_control):
 def step_impl(context, question=""):
     assert_that(context.result.question, equal_to(question))
 
+@then('the question should be required')
+def step_impl(context):
+    assert_that(context.result.required, is_(True))
+
+@then('the question should be optional')
+def step_impl(context):
+    assert_that(context.result.required, is_(False))
+
 # Checkbox:
 @then('the label should be "{label}"')
 def step_impl(context, label):
@@ -39,8 +47,20 @@ def step_impl(context):
     items = [row['item'] for row in context.table]
     assert_that(context.result.values, equal_to(items))
 
-# Text:
+# Default values:
 @then('the default value should be "{default_value}"')
 @then('the default value should be empty')
 def step_impl(context, default_value=''):
     assert_that(context.result.default_value, equal_to(default_value))
+
+@then('the default value should be true')
+def step_impl(context):
+    assert_that(context.result.default_value, is_(True))
+
+@then('the default value should be false')
+def step_impl(context):
+    assert_that(context.result.default_value, is_(False))
+
+@then('the default value should be null')
+def step_impl(context):
+    assert_that(context.result.default_value, is_(none()))
