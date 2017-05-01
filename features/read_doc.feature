@@ -31,13 +31,18 @@ Feature: Extracting marks from a MS Word document
           Suspendisse accumsan justo eu elit suscipit, dignissim viverra leo
           sagittis. Aliquam porttitor est in cursus sodales.
           """
+          And a paragraph
+          """
+          «list Betreft kassa- of pinbon op behandeling of hulpmiddel?;behandeling;hulpmiddel»
+          """
           When we analyse the document
           Then the returned questions should be
-              | question        |
-              | Lorem ipsum     |
-              | Morbi           |
-              | Curabitur ipsum |
-              | sapien posuere  |
+              | question                                                                           |
+              | Lorem ipsum                                                                        |
+              | Morbi                                                                              |
+              | Curabitur ipsum                                                                    |
+              | sapien posuere                                                                     |
+              | list Betreft kassa- of pinbon op behandeling of hulpmiddel?;behandeling;hulpmiddel |
 
     Scenario: Marks with simple angle characters
         Given a word document
@@ -67,10 +72,15 @@ Feature: Extracting marks from a MS Word document
           Suspendisse accumsan justo eu elit suscipit, dignissim viverra leo
           sagittis. Aliquam porttitor est in cursus sodales.
           """
+          And a paragraph
+          """
+          <<list Betreft kassa- of pinbon op behandeling of hulpmiddel?;behandeling;hulpmiddel>>
+          """
           When we analyse the document
           Then the returned questions should be
-              | question                    |
-              | consectetur adipiscing elit |
-              | ridiculus mus               |
-              | Praesent                    |
-              | sapien posuere              |
+              | question                                                                           |
+              | consectetur adipiscing elit                                                        |
+              | ridiculus mus                                                                      |
+              | Praesent                                                                           |
+              | sapien posuere                                                                     |
+              | list Betreft kassa- of pinbon op behandeling of hulpmiddel?;behandeling;hulpmiddel |
