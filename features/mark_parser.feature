@@ -171,3 +171,51 @@ Feature: Getting steps from marks
          And group name of step 1 should be "Buitenland"
          And group name of step 2 should be "Buitenland"
          And group name of step 3 should be "Buitenland"
+
+    ############
+    # Metadata #
+    ############
+
+    Scenario: Assigning metadatas to regular controls
+        Given a list of marks
+            | mark                                    |
+            |   required generic question             |
+            |   list Dit is de vraagtekst;nota;nota’s |
+            |   line                                  | # Ignored for metadata
+            |   text This is some text in a label     | # Ignored for metadata
+            |   checkbox question;label               |
+            | step Step2                              |
+            |   text This is some text in a label     | # Ignored for metadata
+            |   required generic question 2           |
+            |   line                                  | # Ignored for metadata
+            |   text This is some text in a label     | # Ignored for metadata
+            |   list mylist;item1;item2;item3         |
+            |   text This is some text in a label     | # Ignored for metadata
+        When we get the steps for those marks
+        Then there should be 2 steps
+         And step 0 should have 5 controls
+         And step 1 should have 6 controls
+
+         And control 0 in step 0 should be a string control
+         And control 1 in step 0 should be a list control
+         And control 2 in step 0 should be a line control
+         And control 3 in step 0 should be a label control
+         And control 4 in step 0 should be a checkbox control
+         And control 0 in step 1 should be a label control
+         And control 1 in step 1 should be a string control
+         And control 2 in step 1 should be a line control
+         And control 3 in step 1 should be a label control
+         And control 4 in step 1 should be a list control
+         And control 5 in step 1 should be a label control
+
+         And control 0 in step 0 should have metadata "txt_001"
+         And control 1 in step 0 should have metadata "txt_002"
+         And control 2 in step 0 should have no metadata
+         And control 3 in step 0 should have no metadata
+         And control 4 in step 0 should have metadata "txt_003"
+         And control 0 in step 1 should have no metadata
+         And control 1 in step 1 should have metadata "txt_004"
+         And control 2 in step 1 should have no metadata
+         And control 3 in step 1 should have no metadata
+         And control 4 in step 1 should have metadata "txt_005"
+         And control 5 in step 1 should have no metadata

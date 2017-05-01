@@ -1,5 +1,5 @@
 import re
-from .spell_helper import Step, LineControl, make_control
+from .spell_helper import Step, LabelControl, make_control
 from .util import parse_mark
 
 DEFAULT_STEP_NAME = 'doc_name'
@@ -35,8 +35,8 @@ def assign_metadatas(steps):
     i = 0
     for step in steps:
         for control in step.controls:
-            # <<line>> do not consume metadata
-            if not isinstance(control, LineControl):
+            # <<line>> and <<text>> do not consume metadata
+            if not isinstance(control, LabelControl):
                 control.metadata_name = get_metadata(i)
                 i += 1
 
