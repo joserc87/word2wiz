@@ -93,3 +93,25 @@ Feature: Generating a report
             +----------+---------------+----------+
 
             """
+
+    Scenario: Text items
+        Given a list of marks
+            | mark                 |
+            | text my label        |
+            | question             |
+            | text my label        |
+            | checkbox my checkbox |
+        When we get the steps for those marks
+         And we generate a report for those steps
+        Then the report should be
+            """
+            +----------+-------------+----------+
+            |   STEP   |    FIELD    | METADATA |
+            +----------+-------------+----------+
+            | doc_name | my label    |          |
+            |          | question    | txt_001  |
+            |          | my label    |          |
+            |          | my checkbox | txt_002  |
+            +----------+-------------+----------+
+
+            """

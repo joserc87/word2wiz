@@ -12,15 +12,25 @@ from jinja2 import Environment, FileSystemLoader
 from .config import Config
 from . import word
 from . import mark_parser
-from .spell_helper import LineControl
+from .spell_helper import LineControl, CheckboxControl
+
+
+def get_field_txt(control):
+    if isinstance(control, LineControl):
+        return ''
+    elif isinstance(control, CheckboxControl):
+        return control.question or control.label or ''
+    else:
+        return control.question or control.default_value or ''
 
 
 def generate_report(steps):
     report = ''
     # Lengths of the step name, field and metadata, for formatting purposes
     max_step_length = max([len(step.name) for step in steps])
-    max_field_length = max([max([len(control.question) for control in
-                                 step.controls]) for step in steps])
+    max_field_length = max([max([len(get_field_txt(control))
+                                 for control in step.controls])
+                            for step in steps])
     max_metadata_length = max([max([len(control.metadata_name or '')
                                     for control in step.controls])
                                for step in steps])
@@ -39,7 +49,7 @@ def generate_report(steps):
     for step in steps:
         step_name = step.name or ''
         for control in step.controls:
-            field = control.question or ''
+            field = get_field_txt(control)
             metadata = control.metadata_name or ''
 
             # Add a new row
