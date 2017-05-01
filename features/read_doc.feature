@@ -34,6 +34,7 @@ Feature: Extracting marks from a MS Word document
           And a paragraph
           """
           «list Betreft kassa- of pinbon op behandeling of hulpmiddel?;behandeling;hulpmiddel»
+          «empty omschrijving (hulp)middel=omschrijving (hulp)middel»
           """
           When we analyse the document
           Then the returned questions should be
@@ -43,6 +44,7 @@ Feature: Extracting marks from a MS Word document
               | Curabitur ipsum                                                                    |
               | sapien posuere                                                                     |
               | list Betreft kassa- of pinbon op behandeling of hulpmiddel?;behandeling;hulpmiddel |
+              | empty omschrijving (hulp)middel=omschrijving (hulp)middel                          |
 
     Scenario: Marks with simple angle characters
         Given a word document
@@ -75,6 +77,7 @@ Feature: Extracting marks from a MS Word document
           And a paragraph
           """
           <<list Betreft kassa- of pinbon op behandeling of hulpmiddel?;behandeling;hulpmiddel>>
+          <<empty omschrijving (hulp)middel=omschrijving (hulp)middel>>
           """
           When we analyse the document
           Then the returned questions should be
@@ -84,3 +87,4 @@ Feature: Extracting marks from a MS Word document
               | Praesent                                                                           |
               | sapien posuere                                                                     |
               | list Betreft kassa- of pinbon op behandeling of hulpmiddel?;behandeling;hulpmiddel |
+              | empty omschrijving (hulp)middel=omschrijving (hulp)middel                          |
