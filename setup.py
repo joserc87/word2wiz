@@ -47,6 +47,10 @@ setup(
         'test': ['behave'],
     },
 
+    package_data={
+        'word2wiz': ['*.txt', 'spell/*.spl']
+    },
+
     entry_points={
         'console_scripts': [
             'word2wiz=word2wiz:main',

@@ -1,4 +1,5 @@
 import re
+from os.path import dirname, realpath, join
 from .spell_helper import Step, LabelControl, make_control
 from .util import parse_mark
 
@@ -6,7 +7,7 @@ DEFAULT_STEP_NAME = 'doc_name'
 DEFAULT_STEP_GROUP_NAME = 'Buitenland'
 
 
-def remove_unwanted_matches(marks, file_path='data/unwanted_matches.txt'):
+def remove_unwanted_matches(marks, file_path=None):
     """
     Loads the unwanted matches from unwanted_matches.txt (by default), and
     returns a list with the marks that do not match.
@@ -16,6 +17,9 @@ def remove_unwanted_matches(marks, file_path='data/unwanted_matches.txt'):
     Returns:
         The input list minus the marks that are in the unwanted_matches.txt.
     """
+    if file_path is None:
+        current_dir = dirname(realpath(__file__))
+        file_path = join(current_dir, 'unwanted_matches.txt')
     with open(file_path) as f:
         unwanted_matches = [m for m in f.read().splitlines()]
     return [q for q in marks if q not in unwanted_matches]

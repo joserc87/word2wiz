@@ -5,7 +5,7 @@ found in the document. The spell is printed on the standard output by default
 """
 
 import argparse
-from os.path import basename, splitext
+from os.path import basename, splitext, dirname, realpath, join
 
 from jinja2 import Environment, FileSystemLoader
 
@@ -73,7 +73,9 @@ def generate_report(steps):
 
 def word2wiz(path):
     # Jinja2
-    env = Environment(loader=FileSystemLoader('spell'),
+    current_dir = dirname(realpath(__file__))
+    spell_dir = join(current_dir, 'spell')
+    env = Environment(loader=FileSystemLoader(spell_dir),
                       trim_blocks=True,
                       lstrip_blocks=True)
     main_template = env.get_template('main.spl')
