@@ -9,5 +9,5 @@ def analyse_doc(docx_file):
 
     questions = []
     for p in document.paragraphs:
-        questions += re.findall('«([^»]*)»', p.text)
+        questions += re.findall('(?:«|<<)([^(>>|»)]*)(?:»|>>)', p.text)
     return questions
