@@ -168,7 +168,8 @@ def make_control(mark):
         control.required = True
     elif 'optional' in found_modifiers:
         control.required = False
-    elif 'empty' in found_modifiers:
+
+    if 'empty' in found_modifiers:
         control.question_hidden = True
 
     # Set default value (if specified)
