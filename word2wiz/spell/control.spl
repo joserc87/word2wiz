@@ -1,0 +1,46 @@
+{#
+ # _required
+ # Outputs "required " if the control is requires
+ #}
+{% macro _required(control) -%}
+{{ 'required ' if control.required else '' }}
+{%- endmacro %}
+{#
+ # _default_value
+ # Outputs "= 'default value' " if the default value is not None
+ #}
+{% macro _default_value(control) -%}
+{%- if control.default_value == true %}
+ = selected
+{%- elif control.default_value == false %}
+ = not selected
+{%- else -%}
+{{ (" = '" + control.default_value + "'") if control.default_value is not none else "" }}
+{%- endif -%}
+{%- endmacro %}
+{#
+ # _question
+ # Outputs the question if the question is not hidden, otherwise it returns an
+ # empty string
+ #}
+{% macro _question(control) -%}
+{{ '' if control.question_hidden else control.question }}
+{%- endmacro %}
+{#
+ # render_control
+ # Returns the string for the spell of that control, ended in a new line
+ #}
+{% macro render_control(control) %}
+{% if control.type == 'string' %}
+{{ _required(control) }}'{{ _question(control) }}'{{ _default_value(control) }} -> ${{ control.metadata_name }}
+{% elif control.type == 'checkbox' %}
+{{ _required(control) }}checkbox(@label='{{ control.label }}') '{{ _question(control) }}'{{ _default_value(control) }} -> ${{ control.metadata_name }}
+{% elif control.type == 'list' %}
+{{ _required(control) }}list '{{ _question(control) }}'{{ _default_value(control) }} -> ${{ control.metadata_name }}:
+    {% for val in control.values %}
+    '{{ val }}'
+    {% endfor %}
+{% elif control.type in ['label', 'line'] %}
+label '{{ _question(control) }}'{{ _default_value(control) }}
+{% endif %}
+{% endmacro %}

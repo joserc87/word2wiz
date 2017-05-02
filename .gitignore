@@ -1,4 +1,7 @@
-/__pycache__/
+__pycache__/
 /uploads/
 /.vagrant/
 /word2wizenv/
+/dist
+/build
+*.egg-info

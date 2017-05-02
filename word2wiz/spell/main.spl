@@ -1,4 +1,5 @@
-# Created by TCF parseWord
+{% from 'control.spl' import render_control %}
+# Created by TCF word2wiz
 step 'Algemeen', 'Buitenland':
     # Set metadatas?
     'Referentienummer' -> $Referentienummer
@@ -31,24 +32,16 @@ step 'Algemeen', 'Buitenland':
         '{{ mc }}'
         {% endfor %}
 
-step '{{ doc_name}}', 'Buitenland':
-    {% for ctrl in controls %}
-    {% if ctrl.type == 'string' %}
-    '{{ ctrl.question }}' -> ${{ ctrl.metadata_name }}
-    {% elif ctrl.type == 'checkbox' %}
-    checkbox(@label='{{ ctrl.label }}') '' -> ${{ ctrl.metadata_name }}
-    {% elif ctrl.type == 'list' %}
-    required list '{{ ctrl.question }}' -> ${{ ctrl.metadata_name }}:
-        {% for val in ctrl.values %}
-        '{{ val }}'
-        {% endfor %}
-    {% elif ctrl.type == 'line' %}
-    label '' = '<hr style="height: 1px; border: 0px solid #CCCCCC; border-top-width:1px;" />'
-    {% endif %}
+
+{% for step in steps %}
+step '{{ step.name }}', '{{ step.group_name }}':
+    {% for control in step.controls %}
+    {{ render_control(control) | indent }}
     {% endfor %}
     checkbox 'Bijlage(n) uploaden?' {% if config.defaultbijlageuploaden %}= selected{% endif %} as checkbox_bijlage
     when checkbox_bijlage is not selected:
         goto einde
+{% endfor %}
 
 step 'BIJLAGE', 'Buitenland':
     label '' = 'Bijlage 1 t/m 5 omschrijving, bestand (PDF)'
