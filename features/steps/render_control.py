@@ -1,6 +1,7 @@
 from jinja2 import Environment, FileSystemLoader
 from behave import *
 from hamcrest import *
+from os.path import dirname, realpath, join
 from word2wiz.mark_parser import *
 from word2wiz.spell_helper import *
 
@@ -71,7 +72,9 @@ def step_impl(context):
 
 @when('we render the control')
 def step_impl(context):
-    env = Environment(loader=FileSystemLoader('spell'),
+    current_dir = dirname(realpath(__file__))
+    spell_dir = join(current_dir, '..', '..', 'word2wiz', 'spell')
+    env = Environment(loader=FileSystemLoader(spell_dir),
                       trim_blocks=True,
                       lstrip_blocks=True)
     control_template = env.from_string(

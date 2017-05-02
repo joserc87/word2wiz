@@ -9,4 +9,5 @@ def step_impl(context):
 
 @then('the report should be')
 def step_impl(context):
-    assert_that(context.report, equal_to(context.text))
+    report = context.report.replace('\r', '')
+    assert_that(report, equal_to(context.text))

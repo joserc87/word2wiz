@@ -115,7 +115,7 @@ class LineControl(LabelControl):
         # Override type
         self.type = 'line'
         self.question = ''
-        self.default_value = '-'*50
+        self.default_value = '_'*300
 
     def __eq__(self, other):
         return super().__eq__(other) and \
@@ -168,7 +168,8 @@ def make_control(mark):
         control.required = True
     elif 'optional' in found_modifiers:
         control.required = False
-    elif 'empty' in found_modifiers:
+
+    if 'empty' in found_modifiers:
         control.question_hidden = True
 
     # Set default value (if specified)

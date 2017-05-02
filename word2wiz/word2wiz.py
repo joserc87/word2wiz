@@ -12,7 +12,7 @@ from jinja2 import Environment, FileSystemLoader
 from .config import Config
 from . import word
 from . import mark_parser
-from .spell_helper import LineControl, CheckboxControl
+from .spell_helper import LineControl, ListControl, CheckboxControl
 
 
 def get_field_txt(control):
@@ -23,52 +23,78 @@ def get_field_txt(control):
     else:
         return control.question or control.default_value or ''
 
+def get_field_options(control):
+    if isinstance(control, ListControl):
+        return ' | '.join(control.values)
+    elif isinstance(control, CheckboxControl):
+        return ' | '.join(['True', 'False'])
+    return ''
+
+
+def tabularize(columns, rows):
+    """
+    Formats data like a table
+    """
+
+    # Find the width of the columns
+    col_lens = [l for l in map(len, columns)]
+    for row in rows:
+        if isinstance(row, list):
+            col_lens = [max(col_lens[i], len(row[i])) for i in range(len(row))]
+
+    # Print heading
+    divider = '+-{0}-+'.format('-+-'.join(['-'*l for l in col_lens]))
+    semidivider = '| {0} +-{1}-+'.format(
+        ' '*col_lens[0],
+        '-+-'.join(['-'*l for l in col_lens[1:]]))
+    columns = [name.center(width) for name, width in zip(columns, col_lens)]
+    heading = '| {0} |'.format(' | '.join(columns))
+
+    # Print data for row in
+    report = [divider] + [heading] + [divider]
+    for row in rows:
+        if row == 'divider':
+            report += [divider]
+        elif row == 'semidivider':
+            report += [semidivider]
+        else:
+            row = [name.ljust(width) for name, width in zip(row, col_lens)]
+            report += ['| {0} |'.format(' | '.join(row))]
+
+    # Separate the lines of the report by line feeds.
+    return '\r\n'.join(report) + '\r\n'
+
 
 def generate_report(steps):
-    report = ''
-    # Lengths of the step name, field and metadata, for formatting purposes
-    max_step_length = max([len(step.name) for step in steps])
-    max_field_length = max([max([len(get_field_txt(control))
-                                 for control in step.controls])
-                            for step in steps])
-    max_metadata_length = max([max([len(control.metadata_name or '')
-                                    for control in step.controls])
-                               for step in steps])
-    max_step_length = max(max_step_length, len('STEP'))
-    max_field_length = max(max_field_length, len('FIELD'))
-    max_metadata_length = max(max_metadata_length, len('METADATA'))
-    # Heading:
-    heading = '| {0} | {1} | {2} |\n'.format(
-        'STEP'.center(max_step_length),
-        'FIELD'.center(max_field_length),
-        'METADATA'.center(max_metadata_length))
-    # Divider:
-    divider = '+-{0}-+-{1}-+-{2}-+\n'.format(
-        '-'*max_step_length, '-'*max_field_length, '-'*max_metadata_length)
-    report = divider + heading + divider
+    data = []
+
+    col_names = ['STEP',
+                 'FIELD',
+                 'METADATA',
+                 'OPTIONS']
+
     for step in steps:
+        row = []
         step_name = step.name or ''
         for control in step.controls:
             field = get_field_txt(control)
             metadata = control.metadata_name or ''
+            options = get_field_options(control)
 
-            # Add a new row
             if isinstance(control, LineControl):
-                report += '| {0} +-{1}-+-{2}-+\n'.format(
-                    step_name.ljust(max_step_length),
-                    '-'*max_field_length,
-                    '-'*max_metadata_length)
+                row = 'semidivider'
             else:
-                report += '| {0} | {1} | {2} |\n'.format(
-                    step_name.ljust(max_step_length),
-                    field.ljust(max_field_length),
-                    metadata.ljust(max_metadata_length))
+                row = [step_name,
+                       field,
+                       metadata,
+                       options]
 
+            data += [row]
             # Only show the step name on the first row
             step_name = ''
-        # Add a divider between steps
-        report += divider
-    return report
+        data += ['divider']
+
+    return tabularize(col_names, data)
 
 
 def word2wiz(path):

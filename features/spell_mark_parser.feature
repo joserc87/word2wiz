@@ -48,6 +48,14 @@ Feature: Parsing control marks
           And the question should be "Dit is een unvelveld"
           And the question should be hidden
 
+    Scenario: String mark with empty modifier
+        Given a mark with content "empty required Dit is een unvelveld"
+         When we make a control from that mark
+         Then it should create a string control
+          And the question should be "Dit is een unvelveld"
+          And the question should be hidden
+          And the question should be required
+
     ########
     # Line #
     ########
@@ -58,7 +66,7 @@ Feature: Parsing control marks
          Then it should create a line control
           And it should create a label control
           And the question should be empty
-          And the default value should be "--------------------------------------------------"
+          And the default value should be "____________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________"
           And the question should be hidden
 
     ############

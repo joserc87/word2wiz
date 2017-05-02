@@ -13,12 +13,12 @@ Feature: Generating a report
          And we generate a report for those steps
         Then the report should be
             """
-            +----------+------------------+----------+
-            |   STEP   |      FIELD       | METADATA |
-            +----------+------------------+----------+
-            | doc_name | one question     | txt_001  |
-            |          | another question | txt_002  |
-            +----------+------------------+----------+
+            +----------+------------------+----------+---------+
+            |   STEP   |      FIELD       | METADATA | OPTIONS |
+            +----------+------------------+----------+---------+
+            | doc_name | one question     | txt_001  |         |
+            |          | another question | txt_002  |         |
+            +----------+------------------+----------+---------+
 
             """
 
@@ -34,15 +34,15 @@ Feature: Generating a report
          And we generate a report for those steps
         Then the report should be
             """
-            +----------+------------+----------+
-            |   STEP   |   FIELD    | METADATA |
-            +----------+------------+----------+
-            | doc_name | question 1 | txt_001  |
-            |          | question 2 | txt_002  |
-            +----------+------------+----------+
-            | step 2   | question 3 | txt_003  |
-            |          | question 4 | txt_004  |
-            +----------+------------+----------+
+            +----------+------------+----------+---------+
+            |   STEP   |   FIELD    | METADATA | OPTIONS |
+            +----------+------------+----------+---------+
+            | doc_name | question 1 | txt_001  |         |
+            |          | question 2 | txt_002  |         |
+            +----------+------------+----------+---------+
+            | step 2   | question 3 | txt_003  |         |
+            |          | question 4 | txt_004  |         |
+            +----------+------------+----------+---------+
 
             """
 
@@ -61,18 +61,18 @@ Feature: Generating a report
          And we generate a report for those steps
         Then the report should be
             """
-            +----------+------------+----------+
-            |   STEP   |   FIELD    | METADATA |
-            +----------+------------+----------+
-            | doc_name | question 1 | txt_001  |
-            |          | question 2 | txt_002  |
-            +----------+------------+----------+
-            | step 2   | question 3 | txt_003  |
-            |          | question 4 | txt_004  |
-            |          +------------+----------+
-            |          | question 5 | txt_005  |
-            |          | question 6 | txt_006  |
-            +----------+------------+----------+
+            +----------+------------+----------+---------+
+            |   STEP   |   FIELD    | METADATA | OPTIONS |
+            +----------+------------+----------+---------+
+            | doc_name | question 1 | txt_001  |         |
+            |          | question 2 | txt_002  |         |
+            +----------+------------+----------+---------+
+            | step 2   | question 3 | txt_003  |         |
+            |          | question 4 | txt_004  |         |
+            |          +------------+----------+---------+
+            |          | question 5 | txt_005  |         |
+            |          | question 6 | txt_006  |         |
+            +----------+------------+----------+---------+
 
             """
 
@@ -85,12 +85,12 @@ Feature: Generating a report
          And we generate a report for those steps
         Then the report should be
             """
-            +----------+---------------+----------+
-            |   STEP   |     FIELD     | METADATA |
-            +----------+---------------+----------+
-            | doc_name | question text | txt_001  |
-            |          | question 2    | txt_002  |
-            +----------+---------------+----------+
+            +----------+---------------+----------+-----------------+
+            |   STEP   |     FIELD     | METADATA |     OPTIONS     |
+            +----------+---------------+----------+-----------------+
+            | doc_name | question text | txt_001  | item 1 | item 2 |
+            |          | question 2    | txt_002  |                 |
+            +----------+---------------+----------+-----------------+
 
             """
 
@@ -105,13 +105,13 @@ Feature: Generating a report
          And we generate a report for those steps
         Then the report should be
             """
-            +----------+-------------+----------+
-            |   STEP   |    FIELD    | METADATA |
-            +----------+-------------+----------+
-            | doc_name | my label    |          |
-            |          | question    | txt_001  |
-            |          | my label    |          |
-            |          | my checkbox | txt_002  |
-            +----------+-------------+----------+
+            +----------+-------------+----------+--------------+
+            |   STEP   |    FIELD    | METADATA |   OPTIONS    |
+            +----------+-------------+----------+--------------+
+            | doc_name | my label    |          |              |
+            |          | question    | txt_001  |              |
+            |          | my label    |          |              |
+            |          | my checkbox | txt_002  | True | False |
+            +----------+-------------+----------+--------------+
 
             """
