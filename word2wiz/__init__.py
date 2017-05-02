@@ -1,6 +1,7 @@
 import os
 import argparse
 from word2wiz import word2wiz
+from .version import __version__
 
 
 def isdoc(filepath):
@@ -87,6 +88,12 @@ def main():
     parser.add_argument('--report',
                         help='the ouput report file containing the fields and' +
                         'the metadatas they are linked to')
+
+    parser.add_argument('-v', '--version',
+                        help='prints the version',
+                        action='version',
+                        version='%(prog)s ' + __version__)
+
     # Parse
     args = parser.parse_args()
 

@@ -7,11 +7,14 @@ here = path.abspath(path.dirname(__file__))
 with open(path.join(here, 'README.rst'), encoding='utf-8') as f:
     long_description = f.read()
 
+version = {}
+with open("word2wiz/version.py") as fp:
+    exec(fp.read(), version)
 
 setup(
     name='word2wiz',
 
-    version='0.2.0',
+    version=version['__version__'],
 
     description='A tool to create wizard configurations from MS word documents',
     long_description=long_description,
