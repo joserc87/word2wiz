@@ -115,7 +115,7 @@ class LineControl(LabelControl):
         # Override type
         self.type = 'line'
         self.question = ''
-        self.default_value = '-'*50
+        self.default_value = '_'*300
 
     def __eq__(self, other):
         return super().__eq__(other) and \

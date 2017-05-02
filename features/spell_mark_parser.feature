@@ -66,7 +66,7 @@ Feature: Parsing control marks
          Then it should create a line control
           And it should create a label control
           And the question should be empty
-          And the default value should be "--------------------------------------------------"
+          And the default value should be "____________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________"
           And the question should be hidden
 
     ############
