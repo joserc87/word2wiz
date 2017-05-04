@@ -3,9 +3,6 @@ from os.path import dirname, realpath, join
 from .spell_helper import Step, LabelControl, make_control
 from .util import parse_mark
 
-DEFAULT_STEP_NAME = 'doc_name'
-DEFAULT_STEP_GROUP_NAME = 'Buitenland'
-
 
 def remove_unwanted_matches(marks, file_path=None):
     """
@@ -45,7 +42,7 @@ def assign_metadatas(steps):
                 i += 1
 
 
-def get_steps(marks):
+def get_steps(config, marks):
     """
     Parses a list of marks and extracts the step-control hierarchy. It also
     links the metadatas to the controls.
@@ -54,13 +51,13 @@ def get_steps(marks):
     marks = [trim_mark(q) for q in marks]
     marks = remove_unwanted_matches(marks)
 
-    steps = [Step(DEFAULT_STEP_NAME, DEFAULT_STEP_GROUP_NAME)]
+    steps = [Step(config.defaultstepname, config.defaultstepgroupname)]
 
     for mark in marks:
         # If it's a step mark:
         step_name = parse_mark(mark, 'step')
         if step_name is not None:
-            steps += [Step(step_name, DEFAULT_STEP_GROUP_NAME)]
+            steps += [Step(step_name, config.defaultstepgroupname)]
         else:
             # If it's not a step mark,it must be a control
             steps[-1].add_control(make_control(mark))

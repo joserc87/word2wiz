@@ -2,7 +2,13 @@ from behave import *
 from hamcrest import *
 from word2wiz.mark_parser import *
 from word2wiz.spell_helper import *
+from word2wiz.config import Config
 
+
+@given('a configuration')
+def step_impl(context):
+    context.conf = Config()
+    context.conf.defaultstepname = 'doc_name'
 
 @given('a list of marks')
 def step_impl(context):
@@ -10,7 +16,7 @@ def step_impl(context):
 
 @when('we get the steps for those marks')
 def step_impl(context):
-    context.steps = get_steps(context.marks)
+    context.steps = get_steps(context.conf, context.marks)
 
 @then('there should be {num_steps:d} step')
 @then('there should be {num_steps:d} steps')

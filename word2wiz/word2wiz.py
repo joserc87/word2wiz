@@ -23,6 +23,7 @@ def get_field_txt(control):
     else:
         return control.question or control.default_value or ''
 
+
 def get_field_options(control):
     if isinstance(control, ListControl):
         return ' | '.join(control.values)
@@ -114,9 +115,10 @@ def word2wiz(path):
     marks = config.parse_defaults(marks)
 
     # The steps will have the name of the document
-    mark_parser.DEFAULT_STEP_NAME = splitext(basename(path))[0]
+    if not config.defaultstepname:
+        config.defaultstepname = splitext(basename(path))[0]
     # Parse the marks and get the step-control hierarchy
-    steps = mark_parser.get_steps(marks)
+    steps = mark_parser.get_steps(config, marks)
 
     # Medewerkers for step 1 (name, last name, function)
     medewerkers = [

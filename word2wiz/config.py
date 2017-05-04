@@ -15,7 +15,9 @@ class Config:
             'defaultondertekenaar': none,
             'defaultfunctieondertekenaar': capitalize,
             'defaultbijlageuploaden': parsebool,
-            'defaultmedischecategorie': capitalize
+            'defaultmedischecategorie': capitalize,
+            'defaultstepname': none,
+            'defaultstepgroupname': none
         }
 
         # Default values
@@ -24,6 +26,8 @@ class Config:
         self.defaultfunctieondertekenaar = ""
         self.defaultbijlageuploaden = False
         self.defaultmedischecategorie = "Medisch Declaratie"
+        self.defaultstepname = ""
+        self.defaultstepgroupname = "Buitenland"
 
     def get_value(self, key, string):
         """
