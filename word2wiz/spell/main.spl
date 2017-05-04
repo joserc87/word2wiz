@@ -13,7 +13,7 @@ step 'Algemeen', 'Buitenland':
         # Custom medewerker
         multi:
             string -> $ondertekenaar_naam
-            list = '{{ config.defaultfunctieondertekenaar}}' -> $ondertekenaar_functie:
+            list = '{{ config.defaultfunctieondertekenaar }}' -> $ondertekenaar_functie:
                 'Medewerker declaratieservice'
                 'Klachtcoördinator'
                 'Klachtbehandelaar'
