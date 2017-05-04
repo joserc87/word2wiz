@@ -1,9 +1,28 @@
 class Config:
+    """
+    Contains the configuration values parsed from the word document
+    """
     def __init__(self):
+        # Transformations:
+        def none(s): return s
+
+        def capitalize(s): return s[0].upper() + s[1:]
+
+        def parsebool(s): return s.lower() == 'ja'
+
+        self.attributes = {
+            'defaultonderwerptekst': none,
+            'defaultondertekenaar': none,
+            'defaultfunctieondertekenaar': capitalize,
+            'defaultbijlageuploaden': parsebool,
+            'defaultmedischecategorie': capitalize
+        }
+
+        # Default values
         self.defaultonderwerptekst = ""
         self.defaultondertekenaar = ""
         self.defaultfunctieondertekenaar = ""
-        self.defaultbijlageuploaden = ""
+        self.defaultbijlageuploaden = False
         self.defaultmedischecategorie = "Medisch Declaratie"
 
     def get_value(self, key, string):
@@ -17,42 +36,19 @@ class Config:
             otherwise
         """
         if string.startswith(key):
-            if len(string) > len(key):
-                return string[len(key) + 1:]
-            else:
-                return ''
+            return string[len(key) + 1:]
         return None
 
     def parse_defaults(self, attributes):
         parsed_attributes = []
+        updates = {}
         for attr in attributes:
-            onderwerptekst = self.get_value('defaultonderwerptekst', attr)
-            ondertekenaar = self.get_value('defaultondertekenaar', attr)
-            functieondertekenaar = self.get_value('defaultfunctieondertekenaar',
-                                                  attr)
-            bijlageuploaden = self.get_value('defaultbijlageuploaden', attr)
-            medischecategorie = self.get_value('defaultmedischecategorie', attr)
-
-            if onderwerptekst is not None:
-                self.defaultonderwerptekst = onderwerptekst
-                parsed_attributes += [attr]
-
-            if ondertekenaar is not None:
-                self.defaultondertekenaar = ondertekenaar
-                parsed_attributes += [attr]
-
-            if functieondertekenaar is not None:
-                fo = functieondertekenaar
-                self.defaultfunctieondertekenaar = fo[0].upper() + fo
-                parsed_attributes += [attr]
-
-            if bijlageuploaden is not None:
-                self.defaultbijlageuploaden = bijlageuploaden.lower() == 'ja'
-                parsed_attributes += [attr]
-
-            if medischecategorie is not None:
-                mc = medischecategorie
-                self.defaultmedischecategorie = mc[0].upper() + mc
-                parsed_attributes += [attr]
+            for key, transformation in self.attributes.items():
+                if attr.startswith(key):
+                    value = self.get_value(key, attr)
+                    value = transformation(value)
+                    updates[key] = value
+                    parsed_attributes += [attr]
+        self.__dict__.update(updates)
 
         return [attr for attr in attributes if attr not in parsed_attributes]
