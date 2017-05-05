@@ -56,8 +56,7 @@ def word2wiz(path):
         'Standaard',
         'Marketing',
         'Financieel']
-    spell = main_template.render(doc_name=splitext(basename(path))[0],
-                                 config=config,
+    spell = main_template.render(config=config,
                                  medewerkers=medewerkers,
                                  medischecategorie=medischecategorie,
                                  steps=steps)
