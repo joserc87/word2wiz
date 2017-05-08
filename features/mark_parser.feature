@@ -8,6 +8,7 @@ Feature: Getting steps from marks
         Given a list of marks
             | mark         |
             | one question |
+          And a configuration
          When we get the steps for those marks
          Then there should be 1 step
           And step 0 should have 1 control
@@ -17,6 +18,7 @@ Feature: Getting steps from marks
         Given a list of marks
             | mark |
             | step Algemeen |
+          And a configuration
         When we get the steps for those marks
         Then there should be 2 steps
          And name of step 0 should be "doc_name"
@@ -38,6 +40,7 @@ Feature: Getting steps from marks
             | lb_naam                   |
             | list question 2;val1;val2 |
             | org_adres                 |
+          And a configuration
          When we get the steps for those marks
          Then there should be 2 steps
           And step 0 should have 1 control
@@ -50,6 +53,7 @@ Feature: Getting steps from marks
             | mark                                                |
             |  	 my mark  with	multiple 	 inner spaces         |
             | list Question  with   spaces 	; item 1	; item  2 |
+          And a configuration
          When we get the steps for those marks
          Then there should be 1 step
           And step 0 should have 2 control
@@ -71,6 +75,7 @@ Feature: Getting steps from marks
             | list Dit is de vraagtekst 1;nota;nota’s          |
             | list required Dit is de vraagtekst 2;nota;nota’s |
             | list optional Dit is de vraagtekst 3;nota;nota’s |
+          And a configuration
          When we get the steps for those marks
          Then step 0 should have 3 control
           And control 0 in step 0 should be required
@@ -83,6 +88,7 @@ Feature: Getting steps from marks
             | Dit is een invulveld 1          |
             | optional Dit is een invulveld 2 |
             | required Dit is een invulveld 3 |
+          And a configuration
          When we get the steps for those marks
          Then step 0 should have 3 control
           And control 0 in step 0 should not be required
@@ -100,6 +106,7 @@ Feature: Getting steps from marks
             | required generic question |
             | required generic question |
             | another question |
+          And a configuration
          When we get the steps for those marks
          Then step 0 should have 2 controls
           And control 0 in step 0 should be a string control
@@ -112,6 +119,7 @@ Feature: Getting steps from marks
             | list Dit is de vraagtekst;nota;nota’s |
             | list Dit is de vraagtekst;nota;nota’s |
             | list Dit is de vraagtekst;nota;nota’s2 |
+          And a configuration
          When we get the steps for those marks
          Then step 0 should have 2 control
           And control 0 in step 0 should be a list control
@@ -124,6 +132,7 @@ Feature: Getting steps from marks
             | checkbox question;label            |
             | checkbox required question2;label2 |
             | checkbox required question2;label2 |
+          And a configuration
          When we get the steps for those marks
          Then step 0 should have 4 controls
           And control 0 in step 0 should be a checkbox control
@@ -137,6 +146,7 @@ Feature: Getting steps from marks
             | line |
             | line |
             | line |
+          And a configuration
          When we get the steps for those marks
          Then step 0 should have 3 controls
           And control 0 in step 0 should be a line control
@@ -149,6 +159,7 @@ Feature: Getting steps from marks
             | text Dit is gewoon tekst |
             | text Dit is gewoon tekst |
             | text Dit is gewoon tekst |
+          And a configuration
          When we get the steps for those marks
          Then step 0 should have 3 controls
           And control 0 in step 0 should be a label control
@@ -161,6 +172,7 @@ Feature: Getting steps from marks
             | step Repeated step |
             | step Repeated step |
             | step Repeated step |
+          And a configuration
         When we get the steps for those marks
         Then there should be 4 steps
          And name of step 0 should be "doc_name"
@@ -191,6 +203,7 @@ Feature: Getting steps from marks
             |   text This is some text in a label     | # Ignored for metadata
             |   list mylist;item1;item2;item3         |
             |   text This is some text in a label     | # Ignored for metadata
+          And a configuration
         When we get the steps for those marks
         Then there should be 2 steps
          And step 0 should have 5 controls

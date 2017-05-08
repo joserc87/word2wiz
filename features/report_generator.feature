@@ -9,6 +9,7 @@ Feature: Generating a report
             | mark             |
             | one question     |
             | another question |
+          And a configuration
         When we get the steps for those marks
          And we generate a report for those steps
         Then the report should be
@@ -30,6 +31,7 @@ Feature: Generating a report
             | step step 2 |
             | question 3  |
             | question 4  |
+          And a configuration
         When we get the steps for those marks
          And we generate a report for those steps
         Then the report should be
@@ -57,6 +59,7 @@ Feature: Generating a report
             | line        |
             | question 5  |
             | question 6  |
+          And a configuration
         When we get the steps for those marks
          And we generate a report for those steps
         Then the report should be
@@ -81,6 +84,7 @@ Feature: Generating a report
             | mark                             |
             | list question text;item 1;item 2 |
             | question 2                       |
+          And a configuration
         When we get the steps for those marks
          And we generate a report for those steps
         Then the report should be
@@ -101,6 +105,7 @@ Feature: Generating a report
             | question             |
             | text my label        |
             | checkbox my checkbox |
+          And a configuration
         When we get the steps for those marks
          And we generate a report for those steps
         Then the report should be

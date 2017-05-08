@@ -3,7 +3,7 @@
 import os
 from flask import render_template, Flask, request, send_from_directory
 from subprocess import Popen, PIPE
-from word2wiz import word2wiz
+from word2wiz.word2wiz import word2wiz
 from zipfile import ZipFile
 
 UPLOAD_FOLDER = '/tmp'

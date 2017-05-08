@@ -1,6 +1,6 @@
 {% from 'control.spl' import render_control %}
 # Created by TCF word2wiz
-step 'Algemeen', 'Buitenland':
+step 'Algemeen', '{{ config.defaultstepgroupname }}':
     # Set metadatas?
     'Referentienummer' -> $Referentienummer
     required 'Onderwerp:' = '{{ config.defaultonderwerptekst }}' -> $briefonderwerp
@@ -13,7 +13,7 @@ step 'Algemeen', 'Buitenland':
         # Custom medewerker
         multi:
             string -> $ondertekenaar_naam
-            list = '{{ config.defaultfunctieondertekenaar}}' -> $ondertekenaar_functie:
+            list = '{{ config.defaultfunctieondertekenaar }}' -> $ondertekenaar_functie:
                 'Medewerker declaratieservice'
                 'Klachtcoördinator'
                 'Klachtbehandelaar'
@@ -44,12 +44,12 @@ step '{{ step.name }}', '{{ step.group_name }}':
         goto einde
 {% endfor %}
 
-step 'BIJLAGE', 'Buitenland':
+step 'BIJLAGE', '{{ config.defaultstepgroupname }}':
     label '' = 'Bijlage 1 t/m 5 omschrijving, bestand (PDF)'
     {% for i in range(5) %}
     '' -> $bijlage_oms_{{ '{:02d}'.format(i+1) }}
     attachment -> $bijlage_code_{{ '{:02d}'.format(i+1) }}
     {% endfor %}
 
-step 'EINDE', 'BUITENLAND' as einde:
+step 'EINDE', '{{ config.defaultstepgroupname }}' as einde:
     label '' = 'Het document is klaar'
