@@ -4,27 +4,12 @@ step 'Algemeen', '{{ config.defaultstepgroupname }}':
     # Set metadatas?
     'Referentienummer' -> $Referentienummer
     required 'Onderwerp:' = '{{ config.defaultonderwerptekst }}' -> $briefonderwerp
-    label = 'Ondertekenaar'
-    required radio '' = '{{ config.defaultondertekenaar }}' as medewerker:
-        # Registered medewerkers
-        {% for name, lastname, function in medewerkers %}
-        label = '{{ name }} {{ lastname }} - {{ function }}' as {{ ( name + '_' + lastname )|replace(' ', '_')|lower }}
-        {% endfor %}
-        # Custom medewerker
-        multi:
-            string -> $ondertekenaar_naam
-            list = '{{ config.defaultfunctieondertekenaar }}' -> $ondertekenaar_functie:
-                'Medewerker declaratieservice'
-                'Klachtcoördinator'
-                'Klachtbehandelaar'
-                'Specialist machtigingen'
-
-    # Set the name and function of the selected medewerker
-    {% for name, lastname, function in medewerkers %}
-    when medewerker == '{{ ( name + '_' + lastname )|replace(' ', '_')|lower }}':
-        $ondertekenaar_naam = '{{ name }} {{ lastname }}'
-        $ondertekenaar_functie = '{{ function }}'
-    {% endfor %}
+    
+	# Ondertekenaar
+    required list 'Ondertekenaar:' = $OndertekenaarDefault -> $OndertekenaarDefault:
+        {% for i in range(15) %}
+        $OndertertekenaarDisplay_{{ i + 1 }} = $Ondertekenaar_{{ i + 1 }}
+		{% endfor %}
 
     # Medischecategorie:
     required list 'Indien gewenst, verander optioneel de Medische Categorie van deze brief.' = '{{ config.defaultmedischecategorie }}' -> $medischecategorie_default:
