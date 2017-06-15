@@ -1,6 +1,6 @@
 from behave import *
 from hamcrest import *
-from word2wiz.word2wiz import generate_report
+from word2wiz.report import generate_report
 
 
 @when('we generate a report for those steps')

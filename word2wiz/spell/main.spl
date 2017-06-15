@@ -1,30 +1,15 @@
 {% from 'control.spl' import render_control %}
 # Created by TCF word2wiz
-step 'Algemeen', 'Buitenland':
+step 'Algemeen', '{{ config.defaultstepgroupname }}':
     # Set metadatas?
     'Referentienummer' -> $Referentienummer
     required 'Onderwerp:' = '{{ config.defaultonderwerptekst }}' -> $briefonderwerp
-    label = 'Ondertekenaar'
-    required radio '' = '{{ config.defaultondertekenaar }}' as medewerker:
-        # Registered medewerkers
-        {% for name, lastname, function in medewerkers %}
-        label = '{{ name }} {{ lastname }} - {{ function }}' as {{ ( name + '_' + lastname )|replace(' ', '_')|lower }}
-        {% endfor %}
-        # Custom medewerker
-        multi:
-            string -> $ondertekenaar_naam
-            list = '{{ config.defaultfunctieondertekenaar}}' -> $ondertekenaar_functie:
-                'Medewerker declaratieservice'
-                'Klachtcoördinator'
-                'Klachtbehandelaar'
-                'Specialist machtigingen'
-
-    # Set the name and function of the selected medewerker
-    {% for name, lastname, function in medewerkers %}
-    when medewerker == '{{ ( name + '_' + lastname )|replace(' ', '_')|lower }}':
-        $ondertekenaar_naam = '{{ name }} {{ lastname }}'
-        $ondertekenaar_functie = '{{ function }}'
-    {% endfor %}
+    
+	# Ondertekenaar
+    required list 'Ondertekenaar:' = $OndertekenaarDefault -> $OndertekenaarDefault:
+        {% for i in range(15) %}
+        $OndertertekenaarDisplay_{{ i + 1 }} = $Ondertekenaar_{{ i + 1 }}
+		{% endfor %}
 
     # Medischecategorie:
     required list 'Indien gewenst, verander optioneel de Medische Categorie van deze brief.' = '{{ config.defaultmedischecategorie }}' -> $medischecategorie_default:
@@ -44,12 +29,12 @@ step '{{ step.name }}', '{{ step.group_name }}':
         goto einde
 {% endfor %}
 
-step 'BIJLAGE', 'Buitenland':
+step 'BIJLAGE', '{{ config.defaultstepgroupname }}':
     label '' = 'Bijlage 1 t/m 5 omschrijving, bestand (PDF)'
     {% for i in range(5) %}
     '' -> $bijlage_oms_{{ '{:02d}'.format(i+1) }}
     attachment -> $bijlage_code_{{ '{:02d}'.format(i+1) }}
     {% endfor %}
 
-step 'EINDE', 'BUITENLAND' as einde:
+step 'EINDE', '{{ config.defaultstepgroupname }}' as einde:
     label '' = 'Het document is klaar'
