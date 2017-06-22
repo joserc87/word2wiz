@@ -29,17 +29,11 @@ Feature: Getting steps from marks
     Scenario: 2 steps with unwanted matches
         Given a list of marks
             | mark                      |
-            | verwijderen               |
             | altijd                    |
             | question 1                |
-            | voorletters               |
-            | mw_initialen              |
             | step Second step          |
-            | lb_tekst                  |
-            | lb_naam                   |
-            | lb_naam                   |
             | list question 2;val1;val2 |
-            | org_adres                 |
+            | altijd                    |
           And a configuration
          When we get the steps for those marks
          Then there should be 2 steps
