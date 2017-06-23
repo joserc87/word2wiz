@@ -1,0 +1,2 @@
+step 'EINDE', '{{ config.defaultstepgroupname }}' as einde:
+    label '' = 'Het document is klaar'

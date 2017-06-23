@@ -1,0 +1,6 @@
+step 'BIJLAGE', '{{ config.defaultstepgroupname }}':
+    label '' = 'Bijlage 1 t/m 5 omschrijving, bestand (PDF)'
+    {% for i in range(5) %}
+    '' -> $bijlage_oms_{{ '{:02d}'.format(i+1) }}
+    attachment '' -> $bijlage_code_{{ '{:02d}'.format(i+1) }}
+    {% endfor %}
