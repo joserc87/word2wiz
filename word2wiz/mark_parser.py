@@ -1,6 +1,6 @@
 import re
 from os.path import dirname, realpath, join
-from .spell_helper import Step, LabelControl, make_control
+from .spell_helper import Step, DynamicStep, LabelControl, make_control
 from .util import parse_mark
 
 
@@ -51,22 +51,31 @@ def get_steps(config, marks):
     marks = [trim_mark(q) for q in marks]
     marks = remove_unwanted_matches(marks)
 
-    steps = [Step(config.defaultstepname, config.defaultstepgroupname)]
+    steps = [
+        Step('static1'),
+        DynamicStep(config.defaultstepname, config.defaultstepgroupname)
+    ]
 
     for mark in marks:
         # If it's a step mark:
         step_name = parse_mark(mark, 'step')
         if step_name is not None:
-            steps += [Step(step_name, config.defaultstepgroupname)]
+            steps += [DynamicStep(step_name, config.defaultstepgroupname)]
         else:
             # If it's not a step mark,it must be a control
             steps[-1].add_control(make_control(mark))
 
     # Remove duplicate controls
-    for step in steps:
+    for step in [s for s in steps if type(s) is DynamicStep]:
         step.remove_duplicate_controls()
 
+    # Always add the upload and final step at the end
+    steps += [
+        Step('upload'),
+        Step('end')
+    ]
+
     # Assign metadatas
-    assign_metadatas(steps)
+    assign_metadatas([s for s in steps if type(s) is DynamicStep])
 
     return steps

@@ -23,6 +23,10 @@ def step_impl(context):
 def step_impl(context, num_steps):
     assert_that(len(context.steps), equal_to(num_steps))
 
+@then('step {num_step:d} should have template "{template}"')
+def step_impl(context, num_step, template):
+    assert_that(context.steps[num_step].template, equal_to(template))
+
 @then('step {step_num:d} should have {num_controls:d} control')
 @then('step {step_num:d} should have {num_controls:d} controls')
 def step_impl(context, step_num, num_controls):

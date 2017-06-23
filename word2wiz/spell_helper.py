@@ -1,8 +1,19 @@
 
 class Step(object):
-    def __init__(self, name, group_name):
+    """A generic step. It should at least point to the jinja template to
+    render"""
+
+    def __init__(self, template, name=None, group_name=None):
         self.name = name
         self.group_name = group_name
+        self.template = template
+
+class DynamicStep(Step):
+    """A step using dynamic.spl template and with controls defined by the
+    marks"""
+
+    def __init__(self, name, group_name):
+        super().__init__('dynamic', name, group_name)
         self.controls = []
 
     def add_control(self, control):

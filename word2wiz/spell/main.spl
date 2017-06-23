@@ -1,8 +1,5 @@
 # Created by TCF word2wiz
-{% include 'steps/static1.spl' %}
+{% for step in steps %}
+{% include 'steps/' + step.template + '.spl' %}
 
-{% include 'steps/dynamic.spl' %}
-
-{% include 'steps/upload.spl' %}
-
-{% include 'steps/end.spl' %}
+{% endfor %}
