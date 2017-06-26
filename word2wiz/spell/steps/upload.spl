@@ -1,3 +1,8 @@
+    label '' = '____________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________'
+    checkbox 'Bijlage(n) uploaden?' {% if config.defaultbijlageuploaden %}= selected{% endif %} as checkbox_bijlage
+    when checkbox_bijlage is not selected:
+        goto einde
+
 step 'BIJLAGE', '{{ config.defaultstepgroupname }}':
     label '' = 'Bijlage 1 t/m 5 omschrijving, bestand (PDF)'
     {% for i in range(5) %}
