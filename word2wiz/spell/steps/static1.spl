@@ -6,7 +6,7 @@ step 'Algemeen', '{{ config.defaultstepgroupname }}':
     # Ondertekenaar
     required list 'Ondertekenaar:' = $OndertekenaarDefault -> $OndertekenaarDefault:
         {% for i in range(15) %}
-        $OndertertekenaarDisplay_{{ i + 1 }} = $Ondertekenaar_{{ i + 1 }}
+        $OndertekenaarDisplay_{{ i + 1 }} = $Ondertekenaar_{{ i + 1 }}
         {% endfor %}
 
     # Medischecategorie:

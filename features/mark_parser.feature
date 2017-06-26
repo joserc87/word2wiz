@@ -235,3 +235,57 @@ Feature: Getting steps from marks
          And control 3 in step 2 should have no metadata
          And control 4 in step 2 should have metadata "txt_005"
          And control 5 in step 2 should have no metadata
+
+    ###################
+    # Gekoppeldebrief #
+    ###################
+
+    Scenario: Two letters
+        Given a list of marks
+            | mark            |
+            | step Algemeen   |
+            | gekoppeldebrief |
+            | step brief2     |
+          And a configuration
+         When we get the steps for those marks
+         Then there should be 9 steps
+          And step 0 should have template "static1"
+          And step 1 should have template "dynamic"
+          And step 2 should have template "dynamic"
+          And step 3 should have template "upload"
+          And step 4 should have template "static2"
+          And step 5 should have template "dynamic"
+          And step 6 should have template "dynamic"
+          And step 7 should have template "upload"
+          And step 8 should have template "end"
+          And step 0 should have letter_num 1
+          And step 1 should have letter_num 1
+          And step 2 should have letter_num 1
+          And step 3 should have letter_num 1
+          And step 4 should have letter_num 2
+          And step 5 should have letter_num 2
+          And step 6 should have letter_num 2
+          And step 7 should have letter_num 2
+          And step 8 should have letter_num 2
+          And name of step 1 should be "doc_name"
+          And name of step 2 should be "Algemeen"
+          And group name of step 1 should be "Buitenland"
+          And group name of step 2 should be "Buitenland"
+
+    Scenario: Steps should be linked
+        Given a list of marks
+            | mark            |
+            | step Algemeen   |
+            | gekoppeldebrief |
+            | step brief2     |
+          And a configuration
+         When we get the steps for those marks
+         Then next step of step 0 should be 1
+          And next step of step 1 should be 2
+          And next step of step 2 should be 3
+          And next step of step 3 should be 4
+          And next step of step 4 should be 5
+          And next step of step 5 should be 6
+          And next step of step 6 should be 7
+          And next step of step 7 should be 8
+          And step 8 should not have next step
