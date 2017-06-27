@@ -1,0 +1,16 @@
+step 'Algemeen', '{{ config.defaultstepgroupname }}':
+    # Set metadatas?
+    'Referentienummer' -> $Referentienummer
+    required 'Onderwerp:' = '{{ config.defaultonderwerptekst }}' -> $briefonderwerp
+
+    # Ondertekenaar
+    required list 'Ondertekenaar:' = $OndertekenaarDefault -> $OndertekenaarDefault:
+        {% for i in range(15) %}
+        $OndertekenaarDisplay_{{ i + 1 }} = $Ondertekenaar_{{ i + 1 }}
+        {% endfor %}
+
+    # Medischecategorie:
+    required list 'Indien gewenst, verander optioneel de Medische Categorie van deze brief.' = '{{ config.defaultmedischecategorie }}' -> $medischecategorie_default:
+        {% for mc in medischecategorie %}
+        '{{ mc }}'
+        {% endfor %}

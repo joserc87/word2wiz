@@ -1,4 +1,4 @@
-from .spell_helper import LineControl, ListControl, CheckboxControl
+from .spell_helper import DynamicStep, LineControl, ListControl, CheckboxControl
 
 
 def get_field_txt(control):
@@ -60,7 +60,7 @@ def generate_report(steps):
                  'METADATA',
                  'OPTIONS']
 
-    for step in steps:
+    for step in [s for s in steps if type(s) is DynamicStep]:
         row = []
         step_name = step.name or ''
         for control in step.controls:

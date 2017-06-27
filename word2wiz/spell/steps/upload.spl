@@ -1,0 +1,19 @@
+    label '' = '____________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________'
+    {% if config.defaultbijlageuploaden[step.letter_num-1] %}
+        {% set default_value='= selected ' %}
+    {% endif %}
+    checkbox 'Bijlage(n) uploaden?' {{ default_value }}as checkbox_bijlage
+    when checkbox_bijlage is not selected:
+        goto {{ 'einde' if step.next_step.template == 'end' else 'static{}'.format(step.letter_num+1) }}
+
+step 'BIJLAGE', '{{ config.defaultstepgroupname }}':
+    {% if step.letter_num > 1 %}
+    label '' = 'Let op: Dit zijn de vragen voor brief {{ step.letter_num }}!'
+    {% endif %}
+    label '' = 'Bijlage 1 t/m 5 omschrijving, bestand (PDF)'
+    {% for i in range(5) %}
+    {% set brief_pre = 'Brief{}_'.format(step.letter_num) if step.letter_num > 1 else '' %}
+    '' -> {{ '${}bijlage_oms_{:02d}'.format(brief_pre, i+1) }}
+    attachment '' -> {{ '${}bijlage_code_{:02d}'.format(brief_pre, i+1) }}
+
+    {% endfor %}

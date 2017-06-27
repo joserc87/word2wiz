@@ -1,40 +1,5 @@
-{% from 'control.spl' import render_control %}
 # Created by TCF word2wiz
-step 'Algemeen', '{{ config.defaultstepgroupname }}':
-    # Set metadatas?
-    'Referentienummer' -> $Referentienummer
-    required 'Onderwerp:' = '{{ config.defaultonderwerptekst }}' -> $briefonderwerp
-    
-	# Ondertekenaar
-    required list 'Ondertekenaar:' = $OndertekenaarDefault -> $OndertekenaarDefault:
-        {% for i in range(15) %}
-        $OndertertekenaarDisplay_{{ i + 1 }} = $Ondertekenaar_{{ i + 1 }}
-		{% endfor %}
-
-    # Medischecategorie:
-    required list 'Indien gewenst, verander optioneel de Medische Categorie van deze brief.' = '{{ config.defaultmedischecategorie }}' -> $medischecategorie_default:
-        {% for mc in medischecategorie %}
-        '{{ mc }}'
-        {% endfor %}
-
-
 {% for step in steps %}
-step '{{ step.name }}', '{{ step.group_name }}':
-    {% for control in step.controls %}
-    {{ render_control(control) | indent }}
-    {% endfor %}
-    label '' = '____________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________'
-    checkbox 'Bijlage(n) uploaden?' {% if config.defaultbijlageuploaden %}= selected{% endif %} as checkbox_bijlage
-    when checkbox_bijlage is not selected:
-        goto einde
+{% include 'steps/' + step.template + '.spl' %}
+
 {% endfor %}
-
-step 'BIJLAGE', '{{ config.defaultstepgroupname }}':
-    label '' = 'Bijlage 1 t/m 5 omschrijving, bestand (PDF)'
-    {% for i in range(5) %}
-    '' -> $bijlage_oms_{{ '{:02d}'.format(i+1) }}
-    attachment '' -> $bijlage_code_{{ '{:02d}'.format(i+1) }}
-    {% endfor %}
-
-step 'EINDE', '{{ config.defaultstepgroupname }}' as einde:
-    label '' = 'Het document is klaar'

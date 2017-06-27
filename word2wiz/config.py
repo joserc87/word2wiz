@@ -10,11 +10,15 @@ class Config:
 
         def parsebool(s): return s.lower() == 'ja'
 
+        def parseboollist(s):
+            l = [parsebool(i.strip()) for i in s.split(',')]
+            return l + [False]*(2 - len(l))
+
         self.attributes = {
             'defaultonderwerptekst': none,
             'defaultondertekenaar': none,
             'defaultfunctieondertekenaar': capitalize,
-            'defaultbijlageuploaden': parsebool,
+            'defaultbijlageuploaden': parseboollist,
             'defaultmedischecategorie': capitalize,
             'defaultstepname': none,
             'defaultstepgroupname': none
@@ -24,7 +28,7 @@ class Config:
         self.defaultonderwerptekst = ""
         self.defaultondertekenaar = ""
         self.defaultfunctieondertekenaar = ""
-        self.defaultbijlageuploaden = False
+        self.defaultbijlageuploaden = [False]*2
         self.defaultmedischecategorie = "Medisch Declaratie"
         self.defaultstepname = ""
         self.defaultstepgroupname = "Buitenland"
@@ -44,6 +48,10 @@ class Config:
         return None
 
     def parse_defaults(self, attributes):
+        """
+        Parses the marks that start with default and return all the other
+        (normal) marks.
+        """
         parsed_attributes = []
         updates = {}
         for attr in attributes:
