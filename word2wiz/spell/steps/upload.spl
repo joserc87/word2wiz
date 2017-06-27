@@ -1,5 +1,8 @@
     label '' = '____________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________'
-    checkbox 'Bijlage(n) uploaden?' {% if config.defaultbijlageuploaden %}= selected{% endif %} as checkbox_bijlage
+    {% if config.defaultbijlageuploaden[step.letter_num-1] %}
+        {% set default_value='= selected ' %}
+    {% endif %}
+    checkbox 'Bijlage(n) uploaden?' {{ default_value }}as checkbox_bijlage
     when checkbox_bijlage is not selected:
         goto {{ 'einde' if step.next_step.template == 'end' else 'static{}'.format(step.letter_num+1) }}
 

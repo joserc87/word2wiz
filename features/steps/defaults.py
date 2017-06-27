@@ -38,4 +38,16 @@ def step_impl(context, default):
 @then('config.{default} should be false')
 def step_impl(context, default):
     value = _get_value(context, default)
-    assert_that(value, equal_to(False))
+
+@then('config.{default} should be [{values}]')
+def step_impl(context, default, values):
+    listValue = _get_value(context, default)
+    for i, sValue in enumerate([s.strip() for s in values.split(',')]):
+        value = None
+        if sValue == 'true':
+            value = True
+        elif sValue == 'false':
+            value = False
+        elif sValue[0] == sValue[-1] and sValue[0] in ['"', "'"]:
+            value = sValue[1:-1]
+        assert_that(listValue[i], equal_to(value), 'Error in value {}'.format(i))
