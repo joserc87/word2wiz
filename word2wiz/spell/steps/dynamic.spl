@@ -1,5 +1,8 @@
 {% from 'control.spl' import render_control %}
 step '{{ step.name }}', '{{ step.group_name }}':
+    {% if step.letter_num > 1 %}
+    label '' = 'Let op: Dit zijn de vragen voor brief {{ step.letter_num }}!'
+    {% endif %}
     {% for control in step.controls %}
     {{ render_control(control) | indent }}
     {% endfor %}
