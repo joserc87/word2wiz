@@ -36,11 +36,32 @@ Feature: Parsing default values
             | mark |
             | defaultbijlageuploaden ja |
         When we parse the defaults
-        Then config.defaultbijlageuploaden should be true
+        Then config.defaultbijlageuploaden should be [true, false]
 
     Scenario: Bijlageuploaden is False
         Given a list of marks
             | mark |
             | defaultbijlageuploaden nee |
         When we parse the defaults
-        Then config.defaultbijlageuploaden should be false
+        Then config.defaultbijlageuploaden should be [false, false]
+
+    Scenario: Bijlageuploaden2 is True
+        Given a list of marks
+            | mark |
+            | defaultbijlageuploaden nee, ja |
+        When we parse the defaults
+        Then config.defaultbijlageuploaden should be [false, true]
+
+    Scenario: Bijlageuploaden2 is False
+        Given a list of marks
+            | mark |
+            | defaultbijlageuploaden nee, nee |
+        When we parse the defaults
+        Then config.defaultbijlageuploaden should be [false, false]
+
+    Scenario: Bijlageuploaden and Bijlageuploaden2 are True
+        Given a list of marks
+            | mark |
+            | defaultbijlageuploaden ja, ja |
+        When we parse the defaults
+        Then config.defaultbijlageuploaden should be [true, true]

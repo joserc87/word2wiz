@@ -1,6 +1,6 @@
 import re
 from os.path import dirname, realpath, join
-from .spell_helper import Step, LabelControl, make_control
+from .spell_helper import Step, DynamicStep, LabelControl, make_control
 from .util import parse_mark
 
 
@@ -51,22 +51,47 @@ def get_steps(config, marks):
     marks = [trim_mark(q) for q in marks]
     marks = remove_unwanted_matches(marks)
 
-    steps = [Step(config.defaultstepname, config.defaultstepgroupname)]
+    steps = [
+        Step('static1'),
+        DynamicStep(config.defaultstepname, config.defaultstepgroupname)
+    ]
 
+    # Number of the letter we are processing right now
+    letter = 1
     for mark in marks:
         # If it's a step mark:
         step_name = parse_mark(mark, 'step')
+        new_brief = mark == 'gekoppeldebrief'
         if step_name is not None:
-            steps += [Step(step_name, config.defaultstepgroupname)]
+            steps += [DynamicStep(step_name, config.defaultstepgroupname,
+                                  letter_num=letter)]
+        elif new_brief:
+            # Add an upload step to finish the letter and add the new steps
+            steps += [Step('upload', letter_num=letter)]
+            letter += 1
+            steps += [Step('static{}'.format(letter), letter_num=letter)]
+            steps += [DynamicStep(config.defaultstepname, config.defaultstepgroupname,
+                                  letter_num=letter)]
         else:
             # If it's not a step mark,it must be a control
             steps[-1].add_control(make_control(mark))
 
     # Remove duplicate controls
-    for step in steps:
+    for step in [s for s in steps if type(s) is DynamicStep]:
         step.remove_duplicate_controls()
 
+    # Always add the upload and final step at the end
+    steps += [
+        Step('upload', letter_num=letter),
+        Step('end', letter_num=letter)
+    ]
+
+    # Link step.next_step
+    for i, step in enumerate(steps):
+        step.next_step = steps[i + 1] if i + 1 < len(steps) else None
+
+
     # Assign metadatas
-    assign_metadatas(steps)
+    assign_metadatas([s for s in steps if type(s) is DynamicStep])
 
     return steps

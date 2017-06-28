@@ -1,4 +1,4 @@
-from .spell_helper import LineControl, ListControl, CheckboxControl
+from .spell_helper import DynamicStep, LineControl, ListControl, CheckboxControl
 
 
 def get_field_txt(control):
@@ -31,6 +31,7 @@ def tabularize(columns, rows):
 
     # Print heading
     divider = '+-{0}-+'.format('-+-'.join(['-'*l for l in col_lens]))
+    strongdivider = '+={0}=+'.format('=+='.join(['='*l for l in col_lens]))
     semidivider = '| {0} +-{1}-+'.format(
         ' '*col_lens[0],
         '-+-'.join(['-'*l for l in col_lens[1:]]))
@@ -42,8 +43,12 @@ def tabularize(columns, rows):
     for row in rows:
         if row == 'divider':
             report += [divider]
+        elif row == 'strongdivider':
+            report += [strongdivider]
         elif row == 'semidivider':
             report += [semidivider]
+        elif type(row) is str:
+            report += [row]
         else:
             row = [name.ljust(width) for name, width in zip(row, col_lens)]
             report += ['| {0} |'.format(' | '.join(row))]
@@ -60,7 +65,11 @@ def generate_report(steps):
                  'METADATA',
                  'OPTIONS']
 
-    for step in steps:
+    current_letter = 1
+    for step in [s for s in steps if type(s) is DynamicStep]:
+        if step.letter_num > current_letter:
+            data += ['', 'divider']
+            current_letter = step.letter_num
         row = []
         step_name = step.name or ''
         for control in step.controls:
