@@ -15,7 +15,7 @@ if [ -d /vagrant ]; then
         rm -rf $wwwroot
         ln -fs /vagrant $wwwroot
     fi
-elif ! [ -d $www-root ]; then
+elif ! [ -d $wwwroot ]; then
     echo "ERROR: $wwwroot does not exist"
     exit -1
 fi
@@ -51,7 +51,7 @@ sed -i 's/WantedBy=multi-user.target/WantedBy=vagrant.mount/' /etc/systemd/syste
 #########
 
 SPELL_VERSION=v0.2-alfa
-SPELL_PKG_NAME=spell-$SPELL_VERSION.tar
+SPELL_PKG_NAME=spell-$SPELL_VERSION
 SPELL_URL=https://github.com/joserc87/spell/releases/download/$SPELL_VERSION/$SPELL_PKG_NAME.tar
 
 # Instal spell (if not installed)
@@ -59,7 +59,7 @@ if ! hash "spell" 2>/dev/null; then
     cd /tmp
     wget $SPELL_URL
     tar -xvf $SPELL_PKG_NAME.tar
-    mv -R $SPELL_PKG_NAME /usr/local/bin
+    mv $SPELL_PKG_NAME /usr/local/bin
     ln -s /usr/local/bin/$SPELL_PKG_NAME/bin/spell /usr/local/bin/spell
     rm $SPELL_PKG_NAME.tar
 fi
