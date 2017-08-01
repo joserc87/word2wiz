@@ -69,9 +69,10 @@ $(function(){
                 var json = JSON.parse(result);
                 var status = json['status'];
                 var file = json['file'];
+                var errorMessage = json['message']
+                var showErrorsButton = null;
 
-                if(status == 'error'){
-                    errorMessage = json['message'];
+                if (status == 'error') { // Error
                     if (errorMessage == null || errorMessage == '') {
                         errorMessage = 'Unknown error';
                     }
@@ -79,17 +80,23 @@ $(function(){
                     numError++;
                     failedFiles.push(data.files[0].name);
                     dataListFail.push(data);
-                    tpl.find('p').append('<a id="show-errors-' + numError + '" class="browse-button">SHOW ERRORS</a>');
-                    $("#show-errors-" + numError).click(function() {
+                    showErrorsButton = tpl.find('p').append('<a id="show-errors-' + numError + '" class="browse-button">See errors</a>');
+
+                } else { // Success
+                    numSuccess++;
+                    tpl.find('p').append('<a class="browse-button" href="' + file + '">Download</a>');
+                    if (errorMessage != null) {
+                        tpl.find('p').append('<br/>');
+                        showErrorsButton = tpl.find('p').append('<a id="show-warnings-' + numSuccess + '" class="browse-button">See warnings</a>');
+                    }
+                }
+                if (errorMessage != null) {
+                    showErrorsButton.click(function() {
                         // Show the error message in a dialog:
                         var obj = $("#error-dialog").find('p').text(errorMessage);
                         obj.html(obj.html().replace(/\n/g,'<br/>'));
                         $("#error-dialog").dialog("open");
                     });
-
-                }else{
-                    numSuccess++;
-                    tpl.find('p').append('<a class="browse-button" href="' + file + '">Download</a>');
                 }
 
                 updateNote();

@@ -2,6 +2,7 @@
 
 import os
 from flask import render_template, Flask, request, send_from_directory
+import json
 from subprocess import Popen, PIPE
 from word2wiz.word2wiz import word2wiz
 from zipfile import ZipFile
@@ -22,7 +23,8 @@ def secure_filename(filename):
 
 def generate_zip(docx):
     """Generates a zip from the docx containing the spell, the wizard
-    configuration and the txt, and returns the path to that zip file."""
+    configuration and the txt, and returns the path to that zip file, together
+    with the errors and warnings"""
     # file name without the extension and without the path
     filename = os.path.splitext(os.path.basename(docx))[0]
 
@@ -51,7 +53,7 @@ def generate_zip(docx):
             myzip.writestr(filename + '.log', errors)
 
     # Delete docx
-    return zip_filename
+    return zip_filename, errors
 
 
 @app.route("/")
@@ -61,8 +63,18 @@ def index():
 
 def error(message=None):
     """Helper method to return a error JSON object"""
-    part = ', "message": "{}"'.format(message) if message else ''
-    return '{{"status": "error"{}}}'.format(part)
+    data = {"status": "error"}
+    if message:
+        data["message"] = message
+    return json.dumps(data)
+
+
+def success(file_path, message=None):
+    data = {"status": "success",
+            "file": file_path}
+    if message:
+        data["message"] = message
+    return json.dumps(data)
 
 
 @app.route("/upload", methods=['POST'])
@@ -84,11 +96,11 @@ def upload():
                 filename = secure_filename(file.filename)
                 filepath = os.path.join(app.config['UPLOAD_FOLDER'], filename)
                 file.save(filepath)
-                xmlfilepath = generate_zip(filepath)
-                return '{"status": "success", "file": "uploads/' + \
-                    os.path.basename(xmlfilepath) + '"}'
+                xmlfilepath, errors = generate_zip(filepath)
+                complete_path = 'uploads/' + os.path.basename(xmlfilepath)
+                return success(complete_path, errors)
             except Exception as err:
-                return error("Error while parsing the document file\\n\\n{0}"
+                return error("Error while parsing the document file\n\n{0}"
                              .format(err))
 
     return error()
