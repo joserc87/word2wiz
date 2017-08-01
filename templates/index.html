@@ -5,11 +5,12 @@
 		<meta charset="utf-8"/>
 		<title>Word2Wiz - Converting MicroSoft Word documents to Wizard configurations</title>
 
+		<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/dark-hive/jquery-ui.css">
 		<!-- Google web fonts -->
 		<link href="http://fonts.googleapis.com/css?family=PT+Sans+Narrow:400,700" rel='stylesheet' />
 
 		<!-- The main CSS file -->
-        <link href="{{ url_for('static', filename='css/style.css') }}" rel="stylesheet" type="text/css" />
+		<link href="{{ url_for('static', filename='css/style.css') }}" rel="stylesheet" type="text/css" />
 	</head>
 
 	<body>
@@ -28,15 +29,18 @@
 			</ul>
 
 		</form>
+		<!-- Error dialog -->
+		<div id="error-dialog" title="Basic dialog"><p></p></div>
 		<footer>
 			<img src="static/img/Logo TheConsultancyFirm (1).png"></img>
 		</footer>
 
 		<!-- JavaScript Includes -->
-		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+		<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
 		<script src="static/js/jquery.knob.js"></script>
 
 		<!-- jQuery File Upload Dependencies -->
+		<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 		<script src="static/js/jquery.ui.widget.js"></script>
 		<script src="static/js/jquery.iframe-transport.js"></script>
 		<script src="static/js/jquery.fileupload.js"></script>

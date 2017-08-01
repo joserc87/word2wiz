@@ -56,5 +56,8 @@ between the questions and the metadatas.
 
 ### TODO:
 
+- [ ] In the case of a dropdown list, check that the default value is one of
+  the items.
+- [ ] Show any parsing error in the web interface
 - [ ] Remove the zip files after the session is closed.
 - [ ] Handle colisions in the uploaded files. Two files can have the same name.

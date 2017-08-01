@@ -59,28 +59,39 @@ def index():
     return render_template('index.html')
 
 
+def error(message=None):
+    """Helper method to return a error JSON object"""
+    part = ', "message": "{}"'.format(message) if message else ''
+    return '{{"status": "error"{}}}'.format(part)
+
+
 @app.route("/upload", methods=['POST'])
 def upload():
     if request.method == 'POST':
         # check if the post request has the file part
         if 'upl' not in request.files:
-            return '{"status": "error", "message": "No file part"}'
+            return error("No file part")
         file = request.files['upl']
         # if user does not select file, browser also
         # submit a empty part without filename
         if file.filename == '':
-            return '{"status": "error", "message": "No selected file"}'
+            return error("No selected file")
         # If the folder does not exist, create it
         if not os.path.isdir(app.config['UPLOAD_FOLDER']):
             os.mkdir(app.config['UPLOAD_FOLDER'])
         if file and allowed_file(file.filename):
-            filename = secure_filename(file.filename)
-            filepath = os.path.join(app.config['UPLOAD_FOLDER'], filename)
-            file.save(filepath)
-            xmlfilepath = generate_zip(filepath)
-            return '{"status": "success", "file": "uploads/' + \
-                os.path.basename(xmlfilepath) + '"}'
-    return '{"status": "error"}'
+            try:
+                filename = secure_filename(file.filename)
+                filepath = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+                file.save(filepath)
+                xmlfilepath = generate_zip(filepath)
+                return '{"status": "success", "file": "uploads/' + \
+                    os.path.basename(xmlfilepath) + '"}'
+            except Exception as err:
+                return error("Error while parsing the document file\\n\\n{0}"
+                             .format(err))
+
+    return error()
 
 
 @app.route('/uploads/<path:filename>')
