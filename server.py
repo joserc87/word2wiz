@@ -37,7 +37,7 @@ def generate_zip(docx):
                '-pretty-print',
                '-document-types-xml', 'data/documenttypes-zorg.xml',
                '-document-type', 'DOCWIZ'],
-              stdin=PIPE, stdout=PIPE)
+              stdin=PIPE, stdout=PIPE, stderr=PIPE)
     stdout, stderr = p.communicate(input=bytes(spell, 'utf-8'))  # [0]
     wizard_configuration = stdout.decode()
     errors = stderr.decode() if stderr else None
