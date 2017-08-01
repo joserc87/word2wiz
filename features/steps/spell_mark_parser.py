@@ -11,6 +11,22 @@ def step_impl(context, mark):
 def step_impl(context):
     context.result = make_control(context.mark)
 
+@when('we try to make a control from that mark')
+def step_impl(context):
+    try:
+        context.result = make_control(context.mark)
+        context.exception = None
+    except Exception as e:
+        context.exception = e
+
+@when('{who} try to {what}')
+def step_impl(context, who, what):
+    try:
+        context.execute_steps("when " + who + " " + what)
+        context.exception = None
+    except Exception as e:
+        context.exception = e
+
 @then('it should create a {type_control} control')
 def step_impl(context, type_control):
     control_types = {
@@ -72,3 +88,12 @@ def step_impl(context):
 @then('the default value should be null')
 def step_impl(context):
     assert_that(context.result.default_value, is_(none()))
+
+@then('it should throw a {extype} with message "{msg}"')
+def step(context, extype, msg):
+    assert isinstance(context.exception, eval(extype)), \
+        "Invalid exception - expected " + extype + \
+        " got " + str(type(context.exception))
+    assert str(context.exception) == msg, \
+        "Invalid message - expected '" + msg + \
+        "' got '" + str(context.exception) + "'"

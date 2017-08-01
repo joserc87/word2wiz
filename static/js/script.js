@@ -13,6 +13,20 @@ $(function(){
         $(this).parent().find('input').click();
     });
 
+    // jquery dialog
+    $( "#error-dialog" ).dialog({
+        autoOpen: false,
+        height: "auto",
+        width: 400,
+        modal: true,
+        buttons: {
+            Ok: function() {
+            $( this ).dialog( "close" );
+            }
+        }
+    });
+
+
     // Initialize the jQuery File Upload plugin
     $('#upload').fileupload({
 
@@ -50,28 +64,47 @@ $(function(){
             });
 
             // Automatically upload the file once it is added to the queue
-						var jqXHR = data.submit().success(function(result, textStatus, jqXHR){
-						
-							var json = JSON.parse(result);
-							var status = json['status'];
-							var file = json['file'];
-						
-							if(status == 'error'){
-								data.context.addClass('error');
-								numError++;
-								failedFiles.push(data.files[0].name);
-								dataListFail.push(data);
-							}else{
-								numSuccess++;	
-							}
-							
-							updateNote();
-						
-                            tpl.find('p').append('<a class="browse-button" href="' + file + '">Download</a>');
-							// setTimeout(function(){
-							// 	//data.context.fadeOut('slow');
-							// },3000);
-						});
+            var jqXHR = data.submit().success(function(result, textStatus, jqXHR){
+
+                var json = JSON.parse(result);
+                var status = json['status'];
+                var file = json['file'];
+                var errorMessage = json['message']
+                var showErrorsButton = null;
+
+                if (status == 'error') { // Error
+                    if (errorMessage == null || errorMessage == '') {
+                        errorMessage = 'Unknown error';
+                    }
+                    data.context.addClass('error');
+                    numError++;
+                    failedFiles.push(data.files[0].name);
+                    dataListFail.push(data);
+                    showErrorsButton = tpl.find('p').append('<a id="show-errors-' + numError + '" class="browse-button">See errors</a>');
+
+                } else { // Success
+                    numSuccess++;
+                    tpl.find('p').append('<a class="browse-button" href="' + file + '">Download</a>');
+                    if (errorMessage != null) {
+                        tpl.find('p').append('<br/>');
+                        showErrorsButton = tpl.find('p').append('<a id="show-warnings-' + numSuccess + '" class="browse-button">See warnings</a>');
+                    }
+                }
+                if (errorMessage != null) {
+                    showErrorsButton.click(function() {
+                        // Show the error message in a dialog:
+                        var obj = $("#error-dialog").find('p').text(errorMessage);
+                        obj.html(obj.html().replace(/\n/g,'<br/>'));
+                        $("#error-dialog").dialog("open");
+                    });
+                }
+
+                updateNote();
+
+                // setTimeout(function(){
+                // 	//data.context.fadeOut('slow');
+                // },3000);
+            });
         },
 
         progress: function(e, data){
