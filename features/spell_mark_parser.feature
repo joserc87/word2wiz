@@ -123,7 +123,7 @@ Feature: Parsing control marks
           And the default value should be null
           And the question should not be hidden
 
-    Scenario: List mark
+    Scenario: List mark with default value
         Given a mark with content "list Gaat het om 1 of meerdere nota’s?;1 nota; meerdere nota’s=1 nota"
          When we make a control from that mark
          Then it should create a list control
@@ -145,6 +145,11 @@ Feature: Parsing control marks
               | meerdere nota’s |
           And the default value should be null
           And the question should be hidden
+
+    Scenario: List deafult value is not one of the items
+        Given a mark with content "list Gaat het om 1 of meerdere nota’s?;1 nota; meerdere nota’s=2 nota"
+         When we try to make a control from that mark
+         Then it should throw a ValueError with message "List has default value '2 nota' but does not match to any of the list items"
 
     ########
     # Text #

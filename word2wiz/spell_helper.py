@@ -189,5 +189,8 @@ def make_control(mark):
     # Set default value (if specified)
     if default_value is not None:
         control.default_value = default_value
+        if type == 'list' and default_value and default_value not in control.values:
+            raise ValueError("List has default value '{}' but does not match to any of the list items"
+                                .format(control.default_value))
 
     return control
