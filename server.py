@@ -6,7 +6,7 @@ from subprocess import Popen, PIPE
 from word2wiz.word2wiz import word2wiz
 from zipfile import ZipFile
 
-UPLOAD_FOLDER = '/tmp'
+UPLOAD_FOLDER = '/tmp/word2wiz'
 
 app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
@@ -28,11 +28,8 @@ def generate_zip(docx):
 
     # File paths:
     # Folder where everything will be generated
-    conversion_folder = os.path.join(app.config['UPLOAD_FOLDER'], filename)
-    # Spell
-    os.path.join(conversion_folder, '{0}.spl'.format(filename))
-    # Spell
-    os.path.join(conversion_folder, '{0}.spl'.format(filename))
+    if not os.path.isdir(app.config['UPLOAD_FOLDER']):
+        os.mkdir(app.config['UPLOAD_FOLDER'])
     # Generate the spell
     spell, report = word2wiz(docx)
     # Compile the spell
@@ -67,14 +64,15 @@ def upload():
     if request.method == 'POST':
         # check if the post request has the file part
         if 'upl' not in request.files:
-            flash('No file part')
-            return '{"status": "error"}'
+            return '{"status": "error", "message": "No file part"}'
         file = request.files['upl']
         # if user does not select file, browser also
         # submit a empty part without filename
         if file.filename == '':
-            flash('No selected file')
-            return '{"status": "error"}'
+            return '{"status": "error", "message": "No selected file"}'
+        # If the folder does not exist, create it
+        if not os.path.isdir(app.config['UPLOAD_FOLDER']):
+            os.mkdir(app.config['UPLOAD_FOLDER'])
         if file and allowed_file(file.filename):
             filename = secure_filename(file.filename)
             filepath = os.path.join(app.config['UPLOAD_FOLDER'], filename)
@@ -90,6 +88,7 @@ def custom_static(filename):
     return send_from_directory(app.config['UPLOAD_FOLDER'], filename,
                                as_attachment=True,
                                mimetype='application/xml')
+
 
 if __name__ == "__main__":
     app.run()
