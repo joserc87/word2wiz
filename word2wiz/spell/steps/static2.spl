@@ -5,6 +5,6 @@ step 'NAW Brief 2', '{{ config.defaultstepgroupname }}' as static2:
     required 'Adresregel3' -> $Brief2_Adresregel3
     'Adresregel4' -> $Brief2_Adresregel4
     'Adresregel5' -> $Brief2_Adresregel5
-    required 'Aanhef' -> $Brief2_Aanhef
+#    required 'Aanhef' -> $Brief2_Aanhef
     checkbox 'Buitenlands adres' -> $Brief2_Buitenlandsadres 
 
