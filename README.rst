@@ -41,7 +41,7 @@ python3 server.py
 
 ### How to run it
 
-To run the converter form the 
+To run the converter form the
 
 ### How it works
 

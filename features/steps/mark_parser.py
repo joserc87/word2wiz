@@ -2,7 +2,13 @@ from behave import *
 from hamcrest import *
 from word2wiz.mark_parser import *
 from word2wiz.spell_helper import *
+from word2wiz.config import Config
 
+
+@given('a configuration')
+def step_impl(context):
+    context.conf = Config()
+    context.conf.defaultstepname = 'doc_name'
 
 @given('a list of marks')
 def step_impl(context):
@@ -10,12 +16,28 @@ def step_impl(context):
 
 @when('we get the steps for those marks')
 def step_impl(context):
-    context.steps = get_steps(context.marks)
+    context.steps = get_steps(context.conf, context.marks)
 
 @then('there should be {num_steps:d} step')
 @then('there should be {num_steps:d} steps')
 def step_impl(context, num_steps):
     assert_that(len(context.steps), equal_to(num_steps))
+
+@then('step {num_step:d} should have template "{template}"')
+def step_impl(context, num_step, template):
+    assert_that(context.steps[num_step].template, equal_to(template))
+
+@then('step {num_step:d} should have letter_num {letter_num:d}')
+def step_impl(context, num_step, letter_num):
+    assert_that(context.steps[num_step].letter_num, equal_to(letter_num))
+
+@then('step {num_step:d} should not have next step')
+@then('next step of step {num_step:d} should be {num_next_step:d}')
+def step_impl(context, num_step, num_next_step=None):
+    assert_that(context.steps[num_step].next_step,
+                equal_to(None if num_next_step is None
+                         else context.steps[num_next_step]))
+
 
 @then('step {step_num:d} should have {num_controls:d} control')
 @then('step {step_num:d} should have {num_controls:d} controls')

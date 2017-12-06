@@ -9,6 +9,7 @@ Feature: Generating a report
             | mark             |
             | one question     |
             | another question |
+          And a configuration
         When we get the steps for those marks
          And we generate a report for those steps
         Then the report should be
@@ -30,6 +31,7 @@ Feature: Generating a report
             | step step 2 |
             | question 3  |
             | question 4  |
+          And a configuration
         When we get the steps for those marks
          And we generate a report for those steps
         Then the report should be
@@ -57,6 +59,7 @@ Feature: Generating a report
             | line        |
             | question 5  |
             | question 6  |
+          And a configuration
         When we get the steps for those marks
          And we generate a report for those steps
         Then the report should be
@@ -81,6 +84,7 @@ Feature: Generating a report
             | mark                             |
             | list question text;item 1;item 2 |
             | question 2                       |
+          And a configuration
         When we get the steps for those marks
          And we generate a report for those steps
         Then the report should be
@@ -101,6 +105,7 @@ Feature: Generating a report
             | question             |
             | text my label        |
             | checkbox my checkbox |
+          And a configuration
         When we get the steps for those marks
          And we generate a report for those steps
         Then the report should be
@@ -113,5 +118,44 @@ Feature: Generating a report
             |          | my label    |          |              |
             |          | my checkbox | txt_002  | True | False |
             +----------+-------------+----------+--------------+
+
+            """
+
+    Scenario: Second envelope
+        Given a list of marks
+            | mark               |
+            | text label l1s1    |
+            | question l1s1      |
+            | step step2 letter1 |
+            | text label l1s2    |
+            | question l1s2      |
+            | gekoppeldebrief    |
+            | text label l2s1    |
+            | question l2s1      |
+            | step step2 letter2 |
+            | text label l2s2    |
+            | question l2s2      |
+          And a configuration
+        When we get the steps for those marks
+         And we generate a report for those steps
+        Then the report should be
+            """
+            +---------------+---------------+----------+---------+
+            |      STEP     |     FIELD     | METADATA | OPTIONS |
+            +---------------+---------------+----------+---------+
+            | doc_name      | label l1s1    |          |         |
+            |               | question l1s1 | txt_001  |         |
+            +---------------+---------------+----------+---------+
+            | step2 letter1 | label l1s2    |          |         |
+            |               | question l1s2 | txt_002  |         |
+            +---------------+---------------+----------+---------+
+
+            +---------------+---------------+----------+---------+
+            | doc_name      | label l2s1    |          |         |
+            |               | question l2s1 | txt_003  |         |
+            +---------------+---------------+----------+---------+
+            | step2 letter2 | label l2s2    |          |         |
+            |               | question l2s2 | txt_004  |         |
+            +---------------+---------------+----------+---------+
 
             """

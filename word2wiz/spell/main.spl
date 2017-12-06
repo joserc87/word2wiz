@@ -1,55 +1,5 @@
-{% from 'control.spl' import render_control %}
 # Created by TCF word2wiz
-step 'Algemeen', 'Buitenland':
-    # Set metadatas?
-    'Referentienummer' -> $Referentienummer
-    required 'Onderwerp:' = '{{ config.defaultonderwerptekst }}' -> $briefonderwerp
-    label = 'Ondertekenaar'
-    required radio '' = '{{ config.defaultondertekenaar }}' as medewerker:
-        # Registered medewerkers
-        {% for name, lastname, function in medewerkers %}
-        label = '{{ name }} {{ lastname }} - {{ function }}' as {{ ( name + '_' + lastname )|replace(' ', '_')|lower }}
-        {% endfor %}
-        # Custom medewerker
-        multi:
-            string -> $ondertekenaar_naam
-            list = '{{ config.defaultfunctieondertekenaar}}' -> $ondertekenaar_functie:
-                'Medewerker declaratieservice'
-                'Klachtcoördinator'
-                'Klachtbehandelaar'
-                'Specialist machtigingen'
-
-    # Set the name and function of the selected medewerker
-    {% for name, lastname, function in medewerkers %}
-    when medewerker == '{{ ( name + '_' + lastname )|replace(' ', '_')|lower }}':
-        $ondertekenaar_naam = '{{ name }} {{ lastname }}'
-        $ondertekenaar_functie = '{{ function }}'
-    {% endfor %}
-
-    # Medischecategorie:
-    required list 'Indien gewenst, verander optioneel de Medische Categorie van deze brief.' = '{{ config.defaultmedischecategorie }}' -> $medischecategorie_default:
-        {% for mc in medischecategorie %}
-        '{{ mc }}'
-        {% endfor %}
-
-
 {% for step in steps %}
-step '{{ step.name }}', '{{ step.group_name }}':
-    {% for control in step.controls %}
-    {{ render_control(control) | indent }}
-    {% endfor %}
-    label '' = '____________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________'
-    checkbox 'Bijlage(n) uploaden?' {% if config.defaultbijlageuploaden %}= selected{% endif %} as checkbox_bijlage
-    when checkbox_bijlage is not selected:
-        goto einde
+{% include 'steps/' + step.template + '.spl' %}
+
 {% endfor %}
-
-step 'BIJLAGE', 'Buitenland':
-    label '' = 'Bijlage 1 t/m 5 omschrijving, bestand (PDF)'
-    {% for i in range(5) %}
-    '' -> $bijlage_oms_{{ '{:02d}'.format(i+1) }}
-    attachment -> $bijlage_code_{{ '{:02d}'.format(i+1) }}
-    {% endfor %}
-
-step 'EINDE', 'BUITENLAND' as einde:
-    label '' = 'Het document is klaar'
