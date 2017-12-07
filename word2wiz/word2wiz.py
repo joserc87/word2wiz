@@ -55,6 +55,7 @@ def word2wiz(path):
         'Polis',
         'Standaard',
         'Marketing',
+        'Speciale Zaken',
         'Financieel']
     spell = main_template.render(config=config,
                                  medewerkers=medewerkers,
