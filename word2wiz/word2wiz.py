@@ -52,10 +52,10 @@ def word2wiz(path):
         'Medisch Verhaal',
         'Medisch AWBZ',
         'Medisch Arbo',
+        'Medisch Speciale Zaken',
         'Polis',
         'Standaard',
         'Marketing',
-        'Speciale Zaken',
         'Financieel']
     spell = main_template.render(config=config,
                                  medewerkers=medewerkers,
