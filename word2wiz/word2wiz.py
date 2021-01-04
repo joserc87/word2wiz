@@ -46,6 +46,7 @@ def word2wiz(path):
     medischecategorie = [
         'Medisch Polis',
         'Medisch Machtiging',
+        'Medisch Machtiging Output',
         'Medisch Declaratie',
         'Medisch Declaratie Dossier',
         'Medisch Zorgbemiddel',
