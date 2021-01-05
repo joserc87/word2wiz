@@ -49,7 +49,7 @@ def word2wiz(path):
         'Medisch Machtiging Output',
         'Medisch Declaratie',
         'Medisch Declaratie Dossier',
-        'Medisch Zorgbemiddel',
+        'Medisch Zorgbemiddeling',
         'Medisch Verhaal',
         'Medisch AWBZ',
         'Medisch Arbo',
